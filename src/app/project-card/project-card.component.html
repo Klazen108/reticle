@@ -14,8 +14,11 @@
       <th>End</th>
       <th>Days</th>
     </tr>
-    <tr *ngFor="let phase of project.phases" class="phase-row">
-      <td [class.active-phase]="within()">{{phase.name}}</td>
+    <tr 
+        *ngFor="let phase of project.phases" 
+        class="phase-row" 
+        [class.active-phase]="within(phase.range?.start,phase.range?.end)">
+      <td>{{phase.name}}</td>
       <td class="date">{{phase.range?.start | date}}</td>
       <td class="days">{{until(phase.range?.start) | number:'1.0-0'}}</td>
       <td class="date">{{phase.range?.end | date}}</td>
