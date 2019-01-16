@@ -1,3 +1,12 @@
-<p>
-  {{project.name}}
-</p>
+<mat-card>
+  <div class="title">{{project.name}}</div>
+  <table class="phase-table">
+  <tr *ngFor="let phase of project.phases" class="phase-row">
+    <td>{{phase.name}}</td>
+    <td>{{phase.range?.start | date}}</td>
+    <td>{{until(phase.range?.start) | number:'1.0-0'}}</td>
+    <td>{{phase.range?.end | date}}</td>
+    <td>{{until(phase.range?.end) | number:'1.0-0'}}</td>
+  </tr>
+  </table>
+</mat-card>

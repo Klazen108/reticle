@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Project } from '../project.model';
+import * as moment from 'moment';
+import { ProjectService } from '../project.service';
 
 @Component({
   selector: 'app-project-list',
@@ -8,15 +10,12 @@ import { Project } from '../project.model';
 })
 export class ProjectListComponent implements OnInit {
 
-  cards: Project[] = [
-    {name:"project a"},
-    {name:"project b"},
-    {name:"project c"}
-  ];
+  cards: Project[] = [];
 
-  constructor() { }
+  constructor(private projectService: ProjectService) { }
 
   ngOnInit() {
+    this.cards = this.projectService.getProjects();
   }
 
 }
