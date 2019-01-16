@@ -1,6 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { Project } from '../project.model';
-import * as moment from 'moment';
 import { ProjectService } from '../project.service';
 
 @Component({
@@ -15,7 +14,9 @@ export class ProjectListComponent implements OnInit {
   constructor(private projectService: ProjectService) { }
 
   ngOnInit() {
-    this.cards = this.projectService.getProjects();
+    this.projectService.getProjects().subscribe(projects => {
+      this.cards = projects;
+    });
   }
 
 }

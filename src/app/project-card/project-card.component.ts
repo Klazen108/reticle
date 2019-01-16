@@ -10,6 +10,8 @@ import * as moment from 'moment';
 export class ProjectCardComponent implements OnInit {
   @Input() project: Project;
 
+  curTime: moment.Moment = moment();
+
   constructor() { }
 
   ngOnInit() {
@@ -21,7 +23,10 @@ export class ProjectCardComponent implements OnInit {
   }
 
   until(date: Date): number {
-    return this.dateDiff(moment().toDate(),date);
+    return this.dateDiff(this.curTime.toDate(),date);
   }
 
+  within(from: Date, to: Date): boolean {
+    return this.curTime.isBetween(from,to);
+  }
 }
