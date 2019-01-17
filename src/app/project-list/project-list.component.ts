@@ -1,6 +1,7 @@
 import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { Project } from '../project.model';
 import { ProjectService } from '../project.service';
+import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 
 @Component({
   selector: 'app-project-list',
@@ -17,6 +18,12 @@ export class ProjectListComponent implements OnInit {
     this.projectService.getProjects().subscribe(projects => {
       this.cards = projects;
     });
+  }
+
+  dropped(event: CdkDragDrop<string[]>) {
+    moveItemInArray(
+      this.cards,event.previousIndex, event.currentIndex
+    );
   }
 
 }

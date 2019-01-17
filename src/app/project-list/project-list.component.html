@@ -1,4 +1,12 @@
 <p>
   ==Project List==
 </p>
-<app-project-card *ngFor="let card of cards" [project]="card"></app-project-card>
+<div class="example-list"
+(cdkDropListDropped)="dropped($event)"
+cdkDropList>
+  <div class="example-box"
+    *ngFor="let card of cards"
+    cdkDrag>
+      <app-project-card  [project]="card"></app-project-card>
+  </div>
+</div>

@@ -6,6 +6,7 @@ import { ProjectListComponent } from './project-list/project-list.component';
 import { ProjectCardComponent } from './project-card/project-card.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatCardModule } from '@angular/material';
+import { DragDropModule } from '@angular/cdk/drag-drop';
 
 
 @NgModule({
@@ -17,7 +18,8 @@ import { MatCardModule } from '@angular/material';
   imports: [
     BrowserModule,
     BrowserAnimationsModule,
-    MatCardModule
+    MatCardModule,
+    DragDropModule
   ],
   providers: [],
   bootstrap: [AppComponent]
