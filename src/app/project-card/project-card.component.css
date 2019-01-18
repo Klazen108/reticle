@@ -7,10 +7,6 @@
     font-size: large;
 }
 
-.phase-table {
-    width: 100%;
-}
-
 .days {
     text-align: center;
 }
@@ -19,6 +15,48 @@
     text-align: center;
 }
 
+.phase-table {
+    width: 100%;
+    display: table;
+}
+
+.phase-table * {
+    font-weight: bold;
+    font-size: large;
+}
+
+.phase-row {
+    border-radius: 10px;
+    display: table-row;
+}
+
+.phase-row > div {
+    display: table-cell;
+    padding: 0.5em;
+}
+
 .active-phase {
     background: #FF0;
+}
+
+.active-phase * {
+    background: #FF0;
+}
+
+.inactive-phase {
+    background: inherit;
+}
+
+.inactive-phase * {
+    background: inherit;
+}
+
+.date-selector {
+    border: none;
+    text-align: center;
+}
+
+.card {
+    margin: 1em;
+    background-color: #F8F8F8;
 }

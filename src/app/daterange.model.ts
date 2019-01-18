@@ -1,4 +1,6 @@
+import { Moment } from "moment";
+
 export class DateRange {
-    start?: Date;
-    end?: Date;
+    start?: Moment;
+    end?: Moment;
 }

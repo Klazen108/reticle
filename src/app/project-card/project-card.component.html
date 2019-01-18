@@ -1,28 +1,48 @@
-<mat-card>
+<mat-card class="card"> 
   <div class="header">
     <div class="title">{{project.name}}</div>
     <div>{{project.branch}}</div>
     <div>{{project.project}}</div>
     <div>{{project.release}}</div>
     <div>[{{project.gc}}]</div>
+    <div *ngIf="project.folder">
+      <button (click)="openProject(project.folder)" mat-stroked-button>{{project.folder}}</button>
+    </div>
   </div>
-  <table class="phase-table">
-    <tr>
-      <th>Phase</th>
-      <th>Start</th>
-      <th>Days</th>
-      <th>End</th>
-      <th>Days</th>
-    </tr>
-    <tr 
+  <div class="phase-table">
+    <div class="phase-row phase-row-header">
+      <div>Phase</div>
+      <div class="date">Start</div>
+      <div class="days">Days</div>
+      <div class="date">End</div>
+      <div class="days">Days</div>
+      <div class="days">Duration</div>
+    </div>
+    <div 
         *ngFor="let phase of project.phases" 
         class="phase-row" 
-        [class.active-phase]="within(phase.range?.start,phase.range?.end)">
-      <td>{{phase.name}}</td>
-      <td class="date">{{phase.range?.start | date}}</td>
-      <td class="days">{{until(phase.range?.start) | number:'1.0-0'}}</td>
-      <td class="date">{{phase.range?.end | date}}</td>
-      <td class="days">{{until(phase.range?.end) | number:'1.0-0'}}</td>
-    </tr>
-  </table>
+        [class.active-phase]="within(phase.range?.start,phase.range?.end)"
+        [class.inactive-phase]="!within(phase.range?.start,phase.range?.end)">
+      <div>{{phase.name}}</div>
+      <div class="date">
+          <input matInput [matDatepicker]="picker" 
+            class="date-selector"
+            placeholder="Choose a date" 
+            [(ngModel)]="phase.range.start" >
+          <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+          <mat-datepicker #picker></mat-datepicker>
+      </div>
+      <div class="days">{{until(phase.range?.start) | number:'1.0-0'}}</div>
+      <div class="date">
+        <input matInput [matDatepicker]="pickerEnd" 
+          class="date-selector"
+          placeholder="Choose a date" 
+          [(ngModel)]="phase.range.end" >
+        <mat-datepicker-toggle matSuffix [for]="pickerEnd"></mat-datepicker-toggle>
+        <mat-datepicker #pickerEnd></mat-datepicker>
+      </div>
+      <div class="days">{{until(phase.range?.end) | number:'1.0-0'}}</div>
+      <div class="days">{{dateDiff(phase.range?.start,phase.range?.end)+1 | number:'1.0-0'}}</div>
+    </div>
+  </div>
 </mat-card>

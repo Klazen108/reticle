@@ -17,16 +17,20 @@ export class ProjectCardComponent implements OnInit {
   ngOnInit() {
   }
 
-  dateDiff(from: Date, to: Date): number {
-    var duration = moment.duration(moment(to).diff(from));
+  dateDiff(from: moment.Moment, to: moment.Moment): number {
+    var duration = moment.duration(to.diff(from));
     return duration.asDays();
   }
 
-  until(date: Date): number {
-    return this.dateDiff(this.curTime.toDate(),date);
+  until(date: moment.Moment): number {
+    return this.dateDiff(this.curTime,date);
   }
 
   within(from: Date, to: Date): boolean {
     return this.curTime.isBetween(from,to);
+  }
+
+  openProject(folder: string) {
+    window.open("google.com", '_blank');
   }
 }

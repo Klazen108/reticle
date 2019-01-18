@@ -2,6 +2,8 @@ import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { Project } from '../project.model';
 import { ProjectService } from '../project.service';
 import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
+import { of } from 'rxjs';
+import { debounceTime } from 'rxjs/operators';
 
 @Component({
   selector: 'app-project-list',
@@ -24,6 +26,16 @@ export class ProjectListComponent implements OnInit {
     moveItemInArray(
       this.cards,event.previousIndex, event.currentIndex
     );
+
+    //of(this.cards).pipe(debounceTime(1000*10)).subscribe(p => {
+      console.log("save time!");
+      this.projectService.saveProjects(this.cards);
+    //});
+  }
+
+  addProject() {
+    this.cards.push(new Project({name:"New Project"}));
+    this.projectService.saveProjects(this.cards);
   }
 
 }

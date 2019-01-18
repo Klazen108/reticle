@@ -5,6 +5,12 @@ export class Project {
     branch?: string;
     release?: string;
     project?: string;
+    gc?: string;
+    folder?: string;
 
     phases?: Phase[];
+
+    public constructor(init?:Partial<Project>) {
+        Object.assign(this, init);
+    }
 }
