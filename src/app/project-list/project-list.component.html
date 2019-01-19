@@ -9,6 +9,7 @@ cdkDropList>
     cdkDrag>
       <app-project-card
         [(project)]="card"
-        (onUpdate)="onUpdate($event)"></app-project-card>
+        (onUpdate)="onUpdate($event)"
+        (onDelete)="onDelete($event)"></app-project-card>
   </div>
 </div>

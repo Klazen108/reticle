@@ -32,22 +32,6 @@
 
 .phase-table {
     width: 100%;
-    display: table;
-}
-
-.phase-table * {
-    font-weight: bold;
-    font-size: large;
-}
-
-.phase-row {
-    border-radius: 10px;
-    display: table-row;
-}
-
-.phase-row > div {
-    display: table-cell;
-    padding: 0.5em;
 }
 
 .active-phase {

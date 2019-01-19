@@ -2,6 +2,8 @@ import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { Project } from '../project.model';
 import * as moment from 'moment';
 import { timer, Observable, Subscription } from 'rxjs';
+import { MatDialog } from '@angular/material';
+import { DeleteDialogComponent } from '../delete-dialog/delete-dialog.component';
 
 @Component({
   selector: 'app-project-card',
@@ -12,12 +14,17 @@ export class ProjectCardComponent implements OnInit {
   @Input() project: Project;
   
   @Output() onUpdate: EventEmitter<Project> = new EventEmitter();
+  @Output() onDelete: EventEmitter<Project> = new EventEmitter();
 
   curTime: moment.Moment = moment();
   timerSubscription: Subscription;
   editing: boolean;
 
-  constructor() { }
+  displayedColumns: string[] = [
+    "name","start","days","end","daysend","duration"
+  ]
+
+  constructor(public dialog: MatDialog) { }
 
   ngOnInit() {
     //every 10 minutes, update the timer
@@ -68,5 +75,21 @@ export class ProjectCardComponent implements OnInit {
     const red = 255*this.clamp(2-2*normalized,0,1);
     const green = 255*this.clamp(2*normalized,0,1);
     return "rgb("+red+","+green+",0)";
+  }
+
+  delete() {
+    const dialogRef = this.dialog.open(DeleteDialogComponent, {
+      width: '250px',
+      data: this.project
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result)
+        this.onDelete.emit(this.project);
+    });
+  }
+
+  update(event: any) {
+    this.onUpdate.emit(this.project);
   }
 }

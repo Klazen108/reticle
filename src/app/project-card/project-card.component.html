@@ -8,6 +8,7 @@
     <div>{{project.gc}}</div>
     <button *ngIf="project.folder" (click)="openProject(project.folder)" color="primary" mat-raised-button>Open Folder</button>
     <button (click)="toggleEditHeader()" mat-raised-button>Edit</button>
+    <button (click)="delete()" mat-raised-button>Delete</button>
   </div>
   
   <div *ngIf="editing" class="header">
@@ -32,49 +33,60 @@
     <button (click)="toggleEditHeader()" color="primary" mat-raised-button>Save</button>
   </div>
 
-
-  <div class="phase-table">
-    <div class="phase-row phase-row-header">
-      <div>Phase</div>
-      <div class="date">Start</div>
-      <div class="days">Days</div>
-      <div class="date">End</div>
-      <div class="days">Days</div>
-      <div class="days">Duration</div>
-    </div>
-    <div 
-        *ngFor="let phase of project.phases" 
-        class="phase-row" 
-        [class.active-phase]="within(phase.range?.start,phase.range?.end)"
-        [class.inactive-phase]="!within(phase.range?.start,phase.range?.end)">
-      <div>{{phase.name}}</div>
-      <div class="date">
+  <table mat-table [dataSource]="project.phases" class="mat-elevation-z8 phase-table">
+      <ng-container matColumnDef="name">
+        <th mat-header-cell *matHeaderCellDef>Phase</th>
+        <td mat-cell *matCellDef="let phase">
+            {{phase.name}}
+        </td>
+      </ng-container>
+    <ng-container matColumnDef="start">
+      <th mat-header-cell *matHeaderCellDef class="date">Start</th>
+      <td mat-cell *matCellDef="let phase" class="date">
           <input matInput [matDatepicker]="picker" 
             class="date-selector"
             placeholder="Choose a date" 
-            [(ngModel)]="phase.range.start" >
+            [(ngModel)]="phase.range.start"
+            (change)="update($event)" >
           <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
           <mat-datepicker #picker></mat-datepicker>
-      </div>
-      <div 
-        class="days" 
-        [style.background-color]="rangeColor(until(phase.range?.start))">
-        {{until(phase.range?.start) | number:'1.0-0'}}
-      </div>
-      <div class="date">
-        <input matInput [matDatepicker]="pickerEnd" 
+      </td>
+    </ng-container>
+    <ng-container matColumnDef="days">
+      <th mat-header-cell *matHeaderCellDef class="days">Days</th>
+      <td mat-cell *matCellDef="let phase" class="days">
+          {{until(phase.range?.start) | number:'1.0-0'}}
+      </td>
+    </ng-container>
+    <ng-container matColumnDef="end">
+      <th mat-header-cell *matHeaderCellDef class="date">End</th>
+      <td mat-cell *matCellDef="let phase" class="date">
+        <input matInput [matDatepicker]="picker" 
           class="date-selector"
           placeholder="Choose a date" 
-          [(ngModel)]="phase.range.end" >
-        <mat-datepicker-toggle matSuffix [for]="pickerEnd"></mat-datepicker-toggle>
-        <mat-datepicker #pickerEnd></mat-datepicker>
-      </div>
-      <div 
-        class="days" 
-        [style.background-color]="rangeColor(until(phase.range?.end))">
+          [(ngModel)]="phase.range.end"
+          (change)="update($event)">
+        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+        <mat-datepicker #picker></mat-datepicker>
+      </td>
+    </ng-container>
+    <ng-container matColumnDef="daysend">
+      <th mat-header-cell *matHeaderCellDef class="days">Days</th>
+      <td mat-cell *matCellDef="let phase" class="days">
         {{until(phase.range?.end) | number:'1.0-0'}}
-      </div>
-      <div class="days">{{dateDiff(phase.range?.start,phase.range?.end)+1 | number:'1.0-0'}}</div>
-    </div>
-  </div>
+      </td>
+    </ng-container>
+    <ng-container matColumnDef="duration">
+      <th mat-header-cell *matHeaderCellDef class="days">Duration</th>
+      <td mat-cell *matCellDef="let phase" class="days">
+          {{dateDiff(phase.range?.start,phase.range?.end)+1 | number:'1.0-0'}}
+      </td>
+    </ng-container>
+  
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;"
+    [class.active-phase]="within(row.range?.start,row.range?.end)"
+    [class.inactive-phase]="!within(row.range?.start,row.range?.end)"></tr>
+
+  </table>
 </mat-card>

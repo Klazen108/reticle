@@ -4,6 +4,7 @@ import { ProjectService } from '../project.service';
 import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 import { of } from 'rxjs';
 import { debounceTime } from 'rxjs/operators';
+import { MatSnackBar } from '@angular/material';
 
 @Component({
   selector: 'app-project-list',
@@ -13,8 +14,13 @@ import { debounceTime } from 'rxjs/operators';
 export class ProjectListComponent implements OnInit {
 
   cards: Project[] = [];
+  justDeleted: Project = null;
+  justDeletedIndex: number = 0;
 
-  constructor(private projectService: ProjectService) { }
+  constructor(
+    private projectService: ProjectService,
+    public snackBar: MatSnackBar
+  ) { }
 
   ngOnInit() {
     this.projectService.getProjects().subscribe(projects => {
@@ -39,6 +45,28 @@ export class ProjectListComponent implements OnInit {
   }
 
   onUpdate(project: Project) {
+    this.saveList();
+  }
+
+  onDelete(project: Project) {
+    console.log("deleting");
+    var index = this.cards.indexOf(project);
+    if (index > -1) {
+      this.cards.splice(index, 1);
+      this.justDeleted = project;
+      this.justDeletedIndex = index;
+    }
+    this.saveList();
+
+    this.snackBar.open(`Project "${project.name}" deleted`, "Undo", {
+      duration: 10000,
+    }).onAction().subscribe(() => this.unDelete());
+  }
+
+  unDelete() {
+    this.cards.splice(this.justDeletedIndex, 0, this.justDeleted);
+    this.justDeleted = null;
+    this.justDeletedIndex = 0;
     this.saveList();
   }
 
