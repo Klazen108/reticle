@@ -54,4 +54,19 @@ export class ProjectCardComponent implements OnInit {
       this.onUpdate.emit(this.project);
     }
   }
+
+  clamp(val, min, max: number): number {
+    return Math.max(Math.min(val,max),min);
+  }
+
+  rangeColor(val: number): string {
+    const minRange = 0;
+    const maxRange = 14;
+
+    let normalized = this.clamp(val,minRange,maxRange)/(maxRange-minRange);
+    console.log(normalized);
+    const red = 255*this.clamp(2-2*normalized,0,1);
+    const green = 255*this.clamp(2*normalized,0,1);
+    return "rgb("+red+","+green+",0)";
+  }
 }

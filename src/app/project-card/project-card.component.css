@@ -1,8 +1,9 @@
 .header{
-  border: 1px solid black;
   display: flex;
   justify-content: space-between;
-  padding: 3px;
+  padding: 5px;
+  border-radius: 10px;
+  background-color: #EEE;
 }
 
 .header button,

@@ -56,7 +56,11 @@
           <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
           <mat-datepicker #picker></mat-datepicker>
       </div>
-      <div class="days">{{until(phase.range?.start) | number:'1.0-0'}}</div>
+      <div 
+        class="days" 
+        [style.background-color]="rangeColor(until(phase.range?.start))">
+        {{until(phase.range?.start) | number:'1.0-0'}}
+      </div>
       <div class="date">
         <input matInput [matDatepicker]="pickerEnd" 
           class="date-selector"
@@ -65,7 +69,11 @@
         <mat-datepicker-toggle matSuffix [for]="pickerEnd"></mat-datepicker-toggle>
         <mat-datepicker #pickerEnd></mat-datepicker>
       </div>
-      <div class="days">{{until(phase.range?.end) | number:'1.0-0'}}</div>
+      <div 
+        class="days" 
+        [style.background-color]="rangeColor(until(phase.range?.end))">
+        {{until(phase.range?.end) | number:'1.0-0'}}
+      </div>
       <div class="days">{{dateDiff(phase.range?.start,phase.range?.end)+1 | number:'1.0-0'}}</div>
     </div>
   </div>
