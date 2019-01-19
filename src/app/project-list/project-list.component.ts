@@ -35,7 +35,15 @@ export class ProjectListComponent implements OnInit {
 
   addProject() {
     this.cards.push(new Project({name:"New Project"}));
-    this.projectService.saveProjects(this.cards);
+    this.saveList();
   }
 
+  onUpdate(project: Project) {
+    this.saveList();
+  }
+
+  saveList() {
+    console.log("saving");
+    this.projectService.saveProjects(this.cards);
+  }
 }

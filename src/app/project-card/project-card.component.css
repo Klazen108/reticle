@@ -1,6 +1,20 @@
 .header{
   border: 1px solid black;
   display: flex;
+  justify-content: space-between;
+  padding: 3px;
+}
+
+.header button,
+.header div {
+  margin-right: 8px;
+  margin-left: 8px;
+}
+
+.header div {
+    line-height: 36px;
+    font-size: x-large;
+    font-weight: bold;
 }
 
 .title {

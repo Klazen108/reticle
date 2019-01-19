@@ -1,14 +1,38 @@
 <mat-card class="card"> 
-  <div class="header">
-    <div class="title">{{project.name}}</div>
+
+  <div *ngIf="!editing" class="header">
+    <div>{{project.name}}</div>
     <div>{{project.branch}}</div>
     <div>{{project.project}}</div>
     <div>{{project.release}}</div>
-    <div>[{{project.gc}}]</div>
-    <div *ngIf="project.folder">
-      <button (click)="openProject(project.folder)" mat-stroked-button>{{project.folder}}</button>
-    </div>
+    <div>{{project.gc}}</div>
+    <button *ngIf="project.folder" (click)="openProject(project.folder)" color="primary" mat-raised-button>Open Folder</button>
+    <button (click)="toggleEditHeader()" mat-raised-button>Edit</button>
   </div>
+  
+  <div *ngIf="editing" class="header">
+      <mat-form-field>
+        <input matInput placeholder="Project" [(ngModel)]="project.name">
+      </mat-form-field>
+      <mat-form-field>
+        <input matInput placeholder="Branch" [(ngModel)]="project.branch">
+      </mat-form-field>
+      <mat-form-field>
+        <input matInput placeholder="Parent Project" [(ngModel)]="project.project">
+      </mat-form-field>
+      <mat-form-field>
+        <input matInput placeholder="Release" [(ngModel)]="project.release">
+      </mat-form-field>
+      <mat-form-field>
+        <input matInput placeholder="GC#" [(ngModel)]="project.gc">
+      </mat-form-field>
+      <mat-form-field>
+        <input matInput placeholder="Project Folder" [(ngModel)]="project.folder">
+      </mat-form-field>
+    <button (click)="toggleEditHeader()" color="primary" mat-raised-button>Save</button>
+  </div>
+
+
   <div class="phase-table">
     <div class="phase-row phase-row-header">
       <div>Phase</div>

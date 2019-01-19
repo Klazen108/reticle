@@ -5,7 +5,7 @@ import { AppComponent } from './app.component';
 import { ProjectListComponent } from './project-list/project-list.component';
 import { ProjectCardComponent } from './project-card/project-card.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { MatCardModule, MatButtonModule } from '@angular/material';
+import { MatCardModule, MatButtonModule, MatInputModule } from '@angular/material';
 import { DragDropModule } from '@angular/cdk/drag-drop';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatMomentDateModule } from '@angular/material-moment-adapter';
@@ -28,7 +28,8 @@ import { ProjectListHeaderComponent } from './project-list-header/project-list-h
     MatDatepickerModule,
     MatMomentDateModule,
     FormsModule,
-    MatButtonModule
+    MatButtonModule,
+    MatInputModule
   ],
   providers: [],
   bootstrap: [AppComponent]

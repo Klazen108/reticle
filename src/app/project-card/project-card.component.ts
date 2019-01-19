@@ -1,6 +1,7 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { Project } from '../project.model';
 import * as moment from 'moment';
+import { timer, Observable, Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-project-card',
@@ -9,12 +10,25 @@ import * as moment from 'moment';
 })
 export class ProjectCardComponent implements OnInit {
   @Input() project: Project;
+  
+  @Output() onUpdate: EventEmitter<Project> = new EventEmitter();
 
   curTime: moment.Moment = moment();
+  timerSubscription: Subscription;
+  editing: boolean;
 
   constructor() { }
 
   ngOnInit() {
+    //every 10 minutes, update the timer
+    this.timerSubscription = timer(600000, 600000).subscribe(val => {
+      //console.log("retiming");
+      this.curTime = moment();
+    });
+  }
+
+  ngOnDestroy() {
+    this.timerSubscription.unsubscribe();
   }
 
   dateDiff(from: moment.Moment, to: moment.Moment): number {
@@ -32,5 +46,12 @@ export class ProjectCardComponent implements OnInit {
 
   openProject(folder: string) {
     window.open("google.com", '_blank');
+  }
+
+  toggleEditHeader() {
+    this.editing = !this.editing;
+    if (!this.editing) {
+      this.onUpdate.emit(this.project);
+    }
   }
 }

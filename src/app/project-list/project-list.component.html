@@ -7,6 +7,8 @@ cdkDropList>
   <div class="example-box"
     *ngFor="let card of cards"
     cdkDrag>
-      <app-project-card  [project]="card"></app-project-card>
+      <app-project-card
+        [(project)]="card"
+        (onUpdate)="onUpdate($event)"></app-project-card>
   </div>
 </div>
