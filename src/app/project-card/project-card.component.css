@@ -1,5 +1,7 @@
 .header{
   display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
   justify-content: space-between;
   padding: 5px;
   border-radius: 10px;
@@ -13,7 +15,6 @@
 }
 
 .header div {
-    line-height: 36px;
     font-size: x-large;
     font-weight: bold;
 }

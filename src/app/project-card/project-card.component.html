@@ -37,7 +37,11 @@
       <ng-container matColumnDef="name">
         <th mat-header-cell *matHeaderCellDef>Phase</th>
         <td mat-cell *matCellDef="let phase">
-            {{phase.name}}
+            <mat-form-field>
+              <input matInput 
+                [(ngModel)]="phase.name" 
+                (input)="phaseNameChange.next($event.target.value)">
+            </mat-form-field>
         </td>
       </ng-container>
     <ng-container matColumnDef="start">
@@ -54,7 +58,8 @@
     </ng-container>
     <ng-container matColumnDef="days">
       <th mat-header-cell *matHeaderCellDef class="days">Days</th>
-      <td mat-cell *matCellDef="let phase" class="days">
+      <td mat-cell *matCellDef="let phase" class="days"
+        [style.background-color]="rangeColor(until(phase.range?.start))">
           {{until(phase.range?.start) | number:'1.0-0'}}
       </td>
     </ng-container>
@@ -72,7 +77,8 @@
     </ng-container>
     <ng-container matColumnDef="daysend">
       <th mat-header-cell *matHeaderCellDef class="days">Days</th>
-      <td mat-cell *matCellDef="let phase" class="days">
+      <td mat-cell *matCellDef="let phase" class="days"
+      [style.background-color]="rangeColor(until(phase.range?.end))">
         {{until(phase.range?.end) | number:'1.0-0'}}
       </td>
     </ng-container>
@@ -89,4 +95,5 @@
     [class.inactive-phase]="!within(row.range?.start,row.range?.end)"></tr>
 
   </table>
+  <button (click)="addPhase()" mat-raised-button>Add Phase</button>
 </mat-card>

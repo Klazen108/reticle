@@ -42,6 +42,8 @@ export class ProjectListComponent implements OnInit {
   addProject() {
     this.cards.push(new Project({name:"New Project"}));
     this.saveList();
+
+    setTimeout(()=>window.scrollTo({ left: 0, top: 100000, behavior: 'smooth' }),100);
   }
 
   onUpdate(project: Project) {

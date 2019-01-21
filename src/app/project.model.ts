@@ -8,7 +8,7 @@ export class Project {
     gc?: string;
     folder?: string;
 
-    phases?: Phase[];
+    phases: Phase[] = [];
 
     public constructor(init?:Partial<Project>) {
         Object.assign(this, init);
