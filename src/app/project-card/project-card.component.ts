@@ -29,7 +29,7 @@ export class ProjectCardComponent implements OnInit {
   public phaseNameChange = new Subject<string>();
 
   displayedColumns: string[] = [
-    "name","start","days","end","daysend","duration"
+    "name","start","days","end","daysend","duration","remove"
   ]
 
   constructor(public dialog: MatDialog) {

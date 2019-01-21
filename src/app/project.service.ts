@@ -3,7 +3,7 @@ import { Project } from './project.model';
 import * as moment from 'moment';
 import { Observable, of } from 'rxjs';
 import { LocalStorage } from '@ngx-pwa/local-storage';
-import { mergeMap } from 'rxjs/operators';
+import { mergeMap, flatMap } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
@@ -140,5 +140,9 @@ export class ProjectService {
 
   saveProjects(projects: Project[]) {
     this.localStorage.setItemSubscribe("projects",JSON.stringify(projects));
+  }
+
+  getProjectsJson(): Observable<string> {
+    return this.getProjects().pipe(flatMap(p => JSON.stringify(p)));
   }
 }

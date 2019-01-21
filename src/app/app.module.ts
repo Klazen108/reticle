@@ -5,7 +5,7 @@ import { AppComponent } from './app.component';
 import { ProjectListComponent } from './project-list/project-list.component';
 import { ProjectCardComponent } from './project-card/project-card.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { MatCardModule, MatButtonModule, MatInputModule, MatTableModule, MatDialogModule, MatSnackBarModule } from '@angular/material';
+import { MatCardModule, MatButtonModule, MatInputModule, MatTableModule, MatDialogModule, MatSnackBarModule, MatIconModule } from '@angular/material';
 import { DragDropModule } from '@angular/cdk/drag-drop';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatMomentDateModule } from '@angular/material-moment-adapter';
@@ -34,7 +34,8 @@ import { DeleteDialogComponent } from './delete-dialog/delete-dialog.component';
     MatInputModule,
     MatTableModule,
     MatDialogModule,
-    MatSnackBarModule
+    MatSnackBarModule,
+    MatIconModule
   ],
   providers: [],
   bootstrap: [AppComponent],
