@@ -2,7 +2,7 @@ import { Component, OnInit, Input, Output, EventEmitter, ViewChild } from '@angu
 import { Project } from '../project.model';
 import * as moment from 'moment';
 import { timer, Observable, Subscription, Subject } from 'rxjs';
-import { MatDialog, MatTable } from '@angular/material';
+import { MatDialog, MatTable, MatSnackBar } from '@angular/material';
 import { DeleteDialogComponent } from '../delete-dialog/delete-dialog.component';
 import { Phase } from '../phase.model';
 
@@ -26,13 +26,17 @@ export class ProjectCardComponent implements OnInit {
   timerSubscription: Subscription;
   editing: boolean;
   
+  justDeleted: Phase = null;
+  justDeletedIndex: number = 0;
+
   public phaseNameChange = new Subject<string>();
 
   displayedColumns: string[] = [
     "name","start","days","end","daysend","duration","remove"
   ]
 
-  constructor(public dialog: MatDialog) {
+  constructor(public dialog: MatDialog,
+    public snackBar: MatSnackBar) {
     const observable = this.phaseNameChange
     .pipe(
       debounceTime(1000),
@@ -55,7 +59,7 @@ export class ProjectCardComponent implements OnInit {
   dateDiff(from: moment.Moment, to: moment.Moment): number {
     if (from == null || to == null) return 0;
     var duration = moment.duration(to.diff(from));
-    return duration.asDays();
+    return Math.ceil(duration.asDays());
   }
 
   until(date: moment.Moment): number {
@@ -63,7 +67,7 @@ export class ProjectCardComponent implements OnInit {
   }
 
   within(from: Date, to: Date): boolean {
-    return this.curTime.isBetween(from,to);
+    return this.curTime.isBetween(moment(from).startOf('day'),moment(to).endOf('day'));
   }
 
   openProject(folder: string) {
@@ -111,5 +115,35 @@ export class ProjectCardComponent implements OnInit {
     this.project.phases.push(new Phase({name:"Phase"}));
     this.table.renderRows();
     this.onUpdate.emit(this.project);
+  }
+
+  removePhase(phase: Phase) {
+    console.log("deleting");
+    var index = this.project.phases.indexOf(phase);
+    if (index > -1) {
+      this.project.phases.splice(index, 1);
+      this.justDeleted = phase;
+      this.justDeletedIndex = index;
+
+      this.table.renderRows();
+      this.onUpdate.emit(this.project);
+      
+      this.snackBar.open(`Phase "${phase.name}" on project "${this.project.name}" deleted`, "Undo", {
+        duration: 10000,
+      }).onAction().subscribe(() => this.unDelete());
+    }
+  }
+
+  unDelete() {
+    this.project.phases.splice(this.justDeletedIndex, 0, this.justDeleted);
+    this.justDeleted = null;
+    this.justDeletedIndex = 0;
+    
+    this.table.renderRows();
+    this.onUpdate.emit(this.project);
+    
+    this.snackBar.open(`Phase "${this.justDeleted.name}" on project "${this.project.name}" restored`, "OK", {
+      duration: 3000,
+    }).onAction().subscribe();
   }
 }

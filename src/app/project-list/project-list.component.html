@@ -1,5 +1,8 @@
 <div>
     <button (click)="addProject()" mat-stroked-button>Add Project</button>
+    <button (click)="exportProjects()" mat-stroked-button>Export Projects</button>
+    <button (click)="importProjects()" mat-stroked-button>Import Projects</button>
+    <button (click)="setDefaultPhases()" mat-stroked-button>Set Default Phases</button>
 </div>
 <div class="example-list"
 (cdkDropListDropped)="dropped($event)"

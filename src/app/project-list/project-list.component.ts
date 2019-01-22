@@ -4,7 +4,10 @@ import { ProjectService } from '../project.service';
 import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 import { of } from 'rxjs';
 import { debounceTime } from 'rxjs/operators';
-import { MatSnackBar } from '@angular/material';
+import { MatSnackBar, MatDialog } from '@angular/material';
+import { DomSanitizer } from '@angular/platform-browser';
+import { ImportDialogComponent } from '../import-dialog/import-dialog.component';
+import { DefaultPhaseDialogComponent } from '../default-phase-dialog/default-phase-dialog.component';
 
 @Component({
   selector: 'app-project-list',
@@ -19,7 +22,8 @@ export class ProjectListComponent implements OnInit {
 
   constructor(
     private projectService: ProjectService,
-    public snackBar: MatSnackBar
+    public snackBar: MatSnackBar,
+    public dialog: MatDialog,
   ) { }
 
   ngOnInit() {
@@ -40,10 +44,12 @@ export class ProjectListComponent implements OnInit {
   }
 
   addProject() {
-    this.cards.push(new Project({name:"New Project"}));
-    this.saveList();
-
-    setTimeout(()=>window.scrollTo({ left: 0, top: 100000, behavior: 'smooth' }),100);
+    this.projectService.getDefaultPhases().subscribe(phases => {
+      this.cards.push(new Project({name:"New Project",phases}));
+      this.saveList();
+  
+      setTimeout(()=>window.scrollTo({ left: 0, top: 100000, behavior: 'smooth' }),100);
+    });
   }
 
   onUpdate(project: Project) {
@@ -57,12 +63,13 @@ export class ProjectListComponent implements OnInit {
       this.cards.splice(index, 1);
       this.justDeleted = project;
       this.justDeletedIndex = index;
-    }
-    this.saveList();
 
-    this.snackBar.open(`Project "${project.name}" deleted`, "Undo", {
-      duration: 10000,
-    }).onAction().subscribe(() => this.unDelete());
+      this.saveList();
+  
+      this.snackBar.open(`Project "${project.name}" deleted`, "Undo", {
+        duration: 10000,
+      }).onAction().subscribe(() => this.unDelete());
+    }
   }
 
   unDelete() {
@@ -70,10 +77,60 @@ export class ProjectListComponent implements OnInit {
     this.justDeleted = null;
     this.justDeletedIndex = 0;
     this.saveList();
+    
+    this.snackBar.open(`Project "${this.justDeleted.name}" restored`, "OK", {
+      duration: 3000,
+    }).onAction().subscribe();
   }
 
   saveList() {
     console.log("saving");
     this.projectService.saveProjects(this.cards);
+  }
+
+  exportProjects() {
+    this.projectService.getProjectsJson().subscribe(s => {
+      let uri = (webkitURL).createObjectURL(new Blob([s],{type:"application/octet-stream"}))
+      console.log(uri);
+      console.log(s);
+      window.open(uri,"_blank");
+      setTimeout(() => (webkitURL).revokeObjectURL(uri));
+    });
+  }
+
+  importProjects() {
+    const dialogRef = this.dialog.open(ImportDialogComponent, {
+      width: '350px'
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        try {
+          JSON.parse(result)
+        } catch (e) {
+          this.snackBar.open("Invalid data, can't import projects!","OK")
+          console.log(e);
+          return;
+        }
+
+        this.projectService.saveProjectsJson(result)
+        .subscribe(() => this.projectService.getProjects()
+        .subscribe(projects => this.cards = projects));
+      }
+    });
+  }
+  
+  setDefaultPhases() {
+    this.projectService.getDefaultPhases().subscribe(p => {
+      const dialogRef = this.dialog.open(DefaultPhaseDialogComponent, {
+        width: '300px',
+        data: p
+      });
+      
+      dialogRef.afterClosed().subscribe(result => {
+        if (result)
+          this.projectService.saveDefaultPhases(result);
+      });
+    });
   }
 }

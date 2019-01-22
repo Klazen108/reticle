@@ -1,0 +1,20 @@
+<h1 mat-dialog-title>Import Projects</h1>
+<div mat-dialog-content>
+  <p>Input your project JSON here to import.</p>
+  <p>WARNING: After import, your existing projects will be gone forever. 
+    Export them first if you don't want to lose them!</p>
+  <mat-form-field>
+    <textarea matInput 
+      placeholder="Project Data" 
+      [(ngModel)]="projectJson"></textarea>
+  </mat-form-field>
+</div>
+<div mat-dialog-actions>
+  <button mat-button 
+    color="primary" 
+    (click)="onNoClick()"
+    cdkFocusInitial>Cancel</button>
+  <button mat-button 
+    color="warn"
+    [mat-dialog-close]="projectJson">Import</button>
+</div>

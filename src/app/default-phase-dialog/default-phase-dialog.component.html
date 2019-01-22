@@ -1,0 +1,28 @@
+
+
+<h1 mat-dialog-title>Archiving {{data.name}}</h1>
+<div mat-dialog-content>
+  <p>Default phases for new projects:</p>
+  <button mat-stroked-button (click)="addPhase()">Add Phase</button>
+  <mat-list 
+    role="list"
+    (cdkDropListDropped)="dropped($event)"
+    cdkDropList>
+    <mat-list-item role="listitem"
+      *ngFor="let phase of data"
+      cdkDrag>
+      <mat-form-field>
+        <input matInput [(ngModel)]=phase.name>
+      </mat-form-field>
+    </mat-list-item>
+  </mat-list>
+</div>
+<div mat-dialog-actions>
+  <button mat-button 
+    color="primary" 
+    (click)="onNoClick()"
+    cdkFocusInitial>Cancel</button>
+  <button mat-button 
+    color="warn"
+    [mat-dialog-close]="data">Save</button>
+</div>

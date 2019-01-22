@@ -3,12 +3,40 @@ import { Project } from './project.model';
 import * as moment from 'moment';
 import { Observable, of } from 'rxjs';
 import { LocalStorage } from '@ngx-pwa/local-storage';
-import { mergeMap, flatMap } from 'rxjs/operators';
+import { mergeMap, map } from 'rxjs/operators';
+import { Phase } from './phase.model';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ProjectService {
+
+  defaultPhases: Phase[] = [
+    {
+      name: "Detail Design", 
+      range: {}
+    },
+    {
+      name: "Story Planning", 
+      range: {}
+    },
+    {
+      name: "Development", 
+      range: {}
+    },
+    {
+      name: "Testing", 
+      range: {}
+    },
+    {
+      name: "QAT", 
+      range: {}
+    },
+    {
+      name: "Deploy", 
+      range: {}
+    },
+  ];
 
   projects: Project[] =[
     new Project({name:"Example Project", 
@@ -143,6 +171,21 @@ export class ProjectService {
   }
 
   getProjectsJson(): Observable<string> {
-    return this.getProjects().pipe(flatMap(p => JSON.stringify(p)));
+    return this.getProjects().pipe(map(p => JSON.stringify(p)));
+  }
+
+  saveProjectsJson(projects: string): Observable<any> {
+    return this.localStorage.setItem("projects",projects);
+  }
+
+  getDefaultPhases(): Observable<Phase[]> {
+  return this.getOrDefault("defaultPhases",this.defaultPhases,
+      (phases)=>JSON.stringify(phases),
+      (json)=>JSON.parse(json)
+    );
+  }
+
+  saveDefaultPhases(phases: Phase[]): Observable<any> {
+    return this.localStorage.setItem("defaultPhases",JSON.stringify(phases));
   }
 }

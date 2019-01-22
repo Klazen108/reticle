@@ -36,11 +36,11 @@
 }
 
 .active-phase {
-    background: #FF0;
+    background: #FFC;
 }
 
 .active-phase * {
-    background: #FF0;
+    background: #FFC;
 }
 
 .inactive-phase {
