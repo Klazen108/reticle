@@ -148,22 +148,8 @@ export class ProjectService {
   getProjects(): Observable<Project[]> {
     return this.getOrDefault("projects",this.projects,
     (prj)=>JSON.stringify(prj),
-    (json)=>{ //TODO: standard decoder?
-      const jsonData = JSON.parse(json);
-      let projects: Project[] = [];
-      for (var i = 0; i < jsonData.length; i++) {
-        //console.log(jsonData[i]);
-        if (jsonData[i].phases) {
-          for (var j = 0; j < jsonData[i].phases.length; j++) {
-            jsonData[i].phases[j].range.start = moment(jsonData[i].phases[j].range.start);
-            jsonData[i].phases[j].range.end = moment(jsonData[i].phases[j].range.end);
-          }
-        }
-        projects.push(new Project(jsonData[i]));
-      }
-      return projects;
-      //new Project[](JSON.parse(json))
-    });
+    this.decodeProjects
+    );
   }
 
   saveProjects(projects: Project[]) {
@@ -187,5 +173,40 @@ export class ProjectService {
 
   saveDefaultPhases(phases: Phase[]): Observable<any> {
     return this.localStorage.setItem("defaultPhases",JSON.stringify(phases));
+  }
+
+  archiveProject(project: Project): Observable<boolean> {
+    return this.getArchive().pipe(mergeMap(archive => {
+      archive.push(project);
+      return this.localStorage.setItem("archivedProjects",archive);
+    }));
+  }
+
+  getArchive(): Observable<Project[]> {
+    return this.getOrDefault("archivedProjects",[],
+      (archive)=>JSON.stringify(archive),
+      this.decodeProjects
+    )
+  }
+
+  /**
+   * Decoder for an array of projects
+   * @param json 
+   */
+  private decodeProjects(json: string): Project[] {
+      const jsonData = JSON.parse(json);
+      let projects: Project[] = [];
+      for (var i = 0; i < jsonData.length; i++) {
+        //console.log(jsonData[i]);
+        if (jsonData[i].phases) {
+          for (var j = 0; j < jsonData[i].phases.length; j++) {
+            jsonData[i].phases[j].range.start = moment(jsonData[i].phases[j].range.start);
+            jsonData[i].phases[j].range.end = moment(jsonData[i].phases[j].range.end);
+          }
+        }
+        projects.push(new Project(jsonData[i]));
+      }
+      return projects;
+      //new Project[](JSON.parse(json))
   }
 }

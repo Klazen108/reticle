@@ -1,13 +1,12 @@
 import { Component, OnInit, Input, Output, EventEmitter, ViewChild } from '@angular/core';
 import { Project } from '../project.model';
 import * as moment from 'moment';
-import { timer, Observable, Subscription, Subject } from 'rxjs';
+import { timer, Subscription, Subject } from 'rxjs';
 import { MatDialog, MatTable, MatSnackBar } from '@angular/material';
 import { DeleteDialogComponent } from '../delete-dialog/delete-dialog.component';
 import { Phase } from '../phase.model';
 
-import { of } from 'rxjs';
-import { flatMap, delay, debounceTime, distinctUntilChanged } from 'rxjs/operators';
+import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
 
 @Component({
   selector: 'app-project-card',
@@ -16,6 +15,8 @@ import { flatMap, delay, debounceTime, distinctUntilChanged } from 'rxjs/operato
 })
 export class ProjectCardComponent implements OnInit {
   @Input() project: Project;
+
+  @Input() expanded: boolean = true;
   
   @Output() onUpdate: EventEmitter<Project> = new EventEmitter();
   @Output() onDelete: EventEmitter<Project> = new EventEmitter();
@@ -30,6 +31,13 @@ export class ProjectCardComponent implements OnInit {
   justDeletedIndex: number = 0;
 
   public phaseNameChange = new Subject<string>();
+
+  phases(): Phase[] {
+    if (this.expanded) return this.project.phases;
+    else {
+      return this.project.phases.filter(p => !p.range || !p.range.end || p.range.end.isAfter(this.curTime));
+    }
+  }
 
   displayedColumns: string[] = [
     "name","start","days","end","daysend","duration","remove"
@@ -145,5 +153,9 @@ export class ProjectCardComponent implements OnInit {
     this.snackBar.open(`Phase "${this.justDeleted.name}" on project "${this.project.name}" restored`, "OK", {
       duration: 3000,
     }).onAction().subscribe();
+  }
+
+  toggleExpand() {
+    this.expanded = !this.expanded;
   }
 }

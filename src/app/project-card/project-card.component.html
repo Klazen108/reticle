@@ -9,6 +9,10 @@
     <button *ngIf="project.folder" (click)="openProject(project.folder)" color="primary" mat-raised-button>Open Folder</button>
     <button (click)="toggleEditHeader()" mat-raised-button>Edit</button>
     <button (click)="delete()" mat-raised-button>Archive</button>
+    <button (click)="toggleExpand()" mat-mini-fab style="color: black">
+        <mat-icon *ngIf="expanded">remove</mat-icon>
+        <mat-icon *ngIf="!expanded">add</mat-icon>
+      </button>
   </div>
   
   <div *ngIf="editing" class="header">
@@ -33,7 +37,7 @@
     <button (click)="toggleEditHeader()" color="primary" mat-raised-button>Save</button>
   </div>
 
-  <table mat-table [dataSource]="project.phases" class="mat-elevation-z8 phase-table">
+  <table mat-table [dataSource]="phases()" class="mat-elevation-z8 phase-table">
       <ng-container matColumnDef="name">
         <th mat-header-cell *matHeaderCellDef>Phase</th>
         <td mat-cell *matCellDef="let phase">
@@ -47,14 +51,16 @@
     <ng-container matColumnDef="start">
       <th mat-header-cell *matHeaderCellDef class="date">Start</th>
       <td mat-cell *matCellDef="let phase" class="date">
-          {{phase.range?.start | date:'EEEE'}},
-          <input matInput [matDatepicker]="picker" 
-            class="date-selector"
-            placeholder="Choose a date" 
-            [(ngModel)]="phase.range.start"
-            (change)="update($event)" >
-          <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-          <mat-datepicker #picker></mat-datepicker>
+        <span class="weekday-tag">
+          {{phase.range?.start | date:'EEEE'}},&nbsp;
+        </span>
+        <input matInput [matDatepicker]="picker" 
+          class="date-selector date-input"
+          placeholder="Choose a date" 
+          [(ngModel)]="phase.range.start"
+          (change)="update($event)" >
+        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+        <mat-datepicker #picker></mat-datepicker>
       </td>
     </ng-container>
     <ng-container matColumnDef="days">
@@ -67,9 +73,11 @@
     <ng-container matColumnDef="end">
       <th mat-header-cell *matHeaderCellDef class="date">End</th>
       <td mat-cell *matCellDef="let phase" class="date">
-          {{phase.range?.end | date:'EEEE'}},
+          <span class="weekday-tag">
+            {{phase.range?.end | date:'EEEE'}},&nbsp;
+          </span>
         <input matInput [matDatepicker]="picker" 
-          class="date-selector"
+          class="date-selector date-input"
           placeholder="Choose a date" 
           [(ngModel)]="phase.range.end"
           (change)="update($event)">
@@ -101,7 +109,8 @@
     </ng-container>
   
     <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-    <tr mat-row *matRowDef="let row; columns: displayedColumns;"
+    <tr mat-row *matRowDef="let row; columns: displayedColumns; when: expanded"
+    class="phase"
     [class.active-phase]="within(row.range?.start,row.range?.end)"
     [class.inactive-phase]="!within(row.range?.start,row.range?.end)"></tr>
 

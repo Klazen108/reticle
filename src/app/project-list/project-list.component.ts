@@ -19,6 +19,7 @@ export class ProjectListComponent implements OnInit {
   cards: Project[] = [];
   justDeleted: Project = null;
   justDeletedIndex: number = 0;
+  expanded = true;
 
   constructor(
     private projectService: ProjectService,
@@ -57,22 +58,31 @@ export class ProjectListComponent implements OnInit {
   }
 
   onDelete(project: Project) {
-    console.log("deleting");
     var index = this.cards.indexOf(project);
     if (index > -1) {
-      this.cards.splice(index, 1);
-      this.justDeleted = project;
-      this.justDeletedIndex = index;
+      this.projectService.archiveProject(project).subscribe(success => {
+        if (!success) {
+          this.snackBar.open(`Error archiving!`, "OK", {
+            duration: 10000,
+          }).onAction().subscribe();
+          return;
+        }
 
-      this.saveList();
+        this.cards.splice(index, 1);
+        this.justDeleted = project;
+        this.justDeletedIndex = index;
   
-      this.snackBar.open(`Project "${project.name}" deleted`, "Undo", {
-        duration: 10000,
-      }).onAction().subscribe(() => this.unDelete());
+        this.saveList();
+        this.snackBar.open(`Project "${project.name}" archived`, "Undo", {
+          duration: 10000,
+        }).onAction().subscribe(() => this.unDelete());
+        return;
+      });
     }
   }
 
   unDelete() {
+    //TODO: need to be able to remove the project from the archive!
     this.cards.splice(this.justDeletedIndex, 0, this.justDeleted);
     this.justDeleted = null;
     this.justDeletedIndex = 0;
@@ -132,5 +142,9 @@ export class ProjectListComponent implements OnInit {
           this.projectService.saveDefaultPhases(result);
       });
     });
+  }
+
+  toggleExpand() {
+    this.expanded = !this.expanded;
   }
 }

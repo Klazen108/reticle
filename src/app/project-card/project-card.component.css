@@ -25,6 +25,8 @@
 
 .days {
     text-align: center;
+    padding-left: 0.5em;
+    padding-right: 0.5em;
 }
 
 .date {
@@ -37,6 +39,7 @@
 
 .active-phase {
     background: #FFC;
+    height:28px;
 }
 
 .active-phase * {
@@ -45,6 +48,7 @@
 
 .inactive-phase {
     background: inherit;
+    height:28px;
 }
 
 .inactive-phase * {
@@ -60,3 +64,31 @@
     margin: 1em;
     background-color: #F8F8F8;
 }
+
+.weekday-tag {
+    width: 7em;
+    text-align: right;
+    display: inline-block;
+}
+.date-input {
+    width: 5em;
+    vertical-align: middle;
+    text-align: left;
+}
+/*
+
+::ng-deep .mat-icon{
+    height:20px !important;
+    width:20px !important;
+    font-size:20px !important;
+}
+
+::ng-deep .mat-mini-fab{
+    height:30px !important;
+    width:30px !important;
+    line-height: 30px !important;
+}
+
+::ng-deep .mat-button-wrapper {
+    padding: 0 !important;
+}*/
