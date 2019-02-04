@@ -1,0 +1,33 @@
+.label {
+    width: 15em;
+    overflow: hidden;
+    display: inline-block;
+}
+
+.graph {
+    display: inline-block;
+}
+
+.phase {
+    background-color: red;
+    white-space: nowrap;
+    overflow: hidden;
+    font-size: xx-small;
+}
+
+.project {
+    border: 1px solid black;
+}
+
+.container {
+    margin: 1em; 
+    position: relative;
+}
+
+.today {
+    background-color: black; 
+    width: 2px; 
+    position:absolute;
+    top: 0;
+    height:100%;
+}

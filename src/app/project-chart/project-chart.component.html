@@ -1,0 +1,19 @@
+<div class="container">
+  <div style="height: 0;">
+    <div class="label">&nbsp;</div>
+    <div #graphBlock class="graph" style="width: 100%;">&nbsp;</div>
+  </div>
+
+  <div class="today" [style.left]="marginLeftToday()">&nbsp;</div>
+
+  <div *ngFor="let project of projects" class="project">
+    <div class="label">{{project.name}}</div>
+    <div class="graph"
+      [style.width]="graphWidth + 'px'">
+      <div *ngFor="let phase of project.phases" 
+        class="phase"
+        [style.width]="width(phase)"
+        [style.margin-left]="marginLeft(phase)">{{phase.name}}&nbsp;</div>
+    </div>
+  </div>
+</div>

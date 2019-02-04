@@ -14,7 +14,17 @@ import { ProjectListHeaderComponent } from './project-list-header/project-list-h
 import { DeleteDialogComponent } from './delete-dialog/delete-dialog.component';
 import { ImportDialogComponent } from './import-dialog/import-dialog.component';
 import { DefaultPhaseDialogComponent } from './default-phase-dialog/default-phase-dialog.component';
+import { RouterModule, Routes } from '@angular/router';
+import { ProjectChartComponent } from './project-chart/project-chart.component';
 
+const appRoutes: Routes = [
+  { path: 'projects', component: ProjectListComponent },
+  { path: 'chart',  component: ProjectChartComponent },
+  { path: '**',
+    redirectTo: '/projects',
+    pathMatch: 'full'
+  },
+];
 
 @NgModule({
   declarations: [
@@ -24,9 +34,13 @@ import { DefaultPhaseDialogComponent } from './default-phase-dialog/default-phas
     ProjectListHeaderComponent,
     DeleteDialogComponent,
     ImportDialogComponent,
-    DefaultPhaseDialogComponent
-  ],
+    DefaultPhaseDialogComponent,
+    ProjectChartComponent  ],
   imports: [
+    RouterModule.forRoot(
+      appRoutes,
+      { enableTracing: true } // <-- debugging purposes only
+    ),
     BrowserModule,
     BrowserAnimationsModule,
     MatCardModule,
