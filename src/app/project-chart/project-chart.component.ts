@@ -7,7 +7,7 @@ import { Phase } from '../phase.model';
 @Component({
   selector: 'app-project-chart',
   templateUrl: './project-chart.component.html',
-  styleUrls: ['./project-chart.component.css']
+  styleUrls: ['./project-chart.component.scss']
 })
 export class ProjectChartComponent implements OnInit {
   @ViewChild('graphBlock') private graphBlock: ElementRef;
@@ -76,7 +76,7 @@ export class ProjectChartComponent implements OnInit {
 
   marginLeftToday(): string {
     if (this.minDate == null) return "0";
-    
+
     const fullWidth = this.maxDate.diff(this.minDate)
     const phaseStart = moment().startOf('day').diff(this.minDate);
     

@@ -7,7 +7,7 @@ import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material';
 @Component({
   selector: 'app-default-phase-dialog',
   templateUrl: './default-phase-dialog.component.html',
-  styleUrls: ['./default-phase-dialog.component.css']
+  styleUrls: ['./default-phase-dialog.component.scss']
 })
 export class DefaultPhaseDialogComponent implements OnInit {
 

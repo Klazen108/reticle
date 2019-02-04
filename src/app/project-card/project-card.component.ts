@@ -11,7 +11,7 @@ import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
 @Component({
   selector: 'app-project-card',
   templateUrl: './project-card.component.html',
-  styleUrls: ['./project-card.component.css']
+  styleUrls: ['./project-card.component.scss']
 })
 export class ProjectCardComponent implements OnInit {
   @Input() project: Project;
@@ -98,8 +98,8 @@ export class ProjectCardComponent implements OnInit {
     const maxRange = 14;
 
     let normalized = this.clamp(val,minRange,maxRange)/(maxRange-minRange);
-    const red = 255*this.clamp(2-2*normalized,0,1);
-    const green = 255*this.clamp(2*normalized,0,1);
+    const red = 150*this.clamp(2-2*normalized,0,1);
+    const green = 150*this.clamp(2*normalized,0,1);
     return "rgb("+red+","+green+",0)";
   }
 

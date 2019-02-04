@@ -5,7 +5,6 @@
   justify-content: space-between;
   padding: 5px;
   border-radius: 10px;
-  background-color: #EEE;
 }
 
 .header button,
@@ -27,6 +26,7 @@
     text-align: center;
     padding-left: 0.5em;
     padding-right: 0.5em;
+    font-weight: bold;
 }
 
 .date {
@@ -38,21 +38,13 @@
 }
 
 .active-phase {
-    background: #FFC;
+    background: #664;
     height:28px;
-}
-
-.active-phase * {
-    background: #FFC;
 }
 
 .inactive-phase {
     background: inherit;
     height:28px;
-}
-
-.inactive-phase * {
-    background: inherit;
 }
 
 .date-selector {
@@ -62,7 +54,6 @@
 
 .card {
     margin: 1em;
-    background-color: #F8F8F8;
 }
 
 .weekday-tag {
@@ -74,6 +65,10 @@
     width: 5em;
     vertical-align: middle;
     text-align: left;
+}
+
+.footer > * {
+    margin-right: 0.5em;
 }
 /*
 

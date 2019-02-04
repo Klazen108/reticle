@@ -9,7 +9,7 @@ import { DefaultPhaseDialogComponent } from '../default-phase-dialog/default-pha
 @Component({
   selector: 'app-project-list',
   templateUrl: './project-list.component.html',
-  styleUrls: ['./project-list.component.css']
+  styleUrls: ['./project-list.component.scss']
 })
 export class ProjectListComponent implements OnInit {
 

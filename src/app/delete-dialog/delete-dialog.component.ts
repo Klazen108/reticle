@@ -5,7 +5,7 @@ import { Project } from '../project.model';
 @Component({
   selector: 'app-delete-dialog',
   templateUrl: './delete-dialog.component.html',
-  styleUrls: ['./delete-dialog.component.css']
+  styleUrls: ['./delete-dialog.component.scss']
 })
 export class DeleteDialogComponent implements OnInit {
 
