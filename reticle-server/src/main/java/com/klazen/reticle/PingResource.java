@@ -10,6 +10,7 @@ import javax.ws.rs.core.MediaType;
  * 
  * @author Chuck
  */
+@Public
 @Path("ping")
 public class PingResource {
     @GET
