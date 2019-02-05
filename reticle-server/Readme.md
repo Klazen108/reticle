@@ -12,4 +12,4 @@ The server will start, and you can stop it by pressing *Enter* once the server h
 
 The server root defaults to `localhost:8080/api/*` - all requests will be served relative to that. To change the configuration, see `com.klazen.Main.configureServer()`
 
-Try a request to [localhost:8080/api/ping] to see if the server is up!
+Try a request to [localhost:8080/api/ping](localhost:8080/api/ping) to see if the server is up!
