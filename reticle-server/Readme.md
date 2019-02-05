@@ -1,10 +1,10 @@
-#Reticle Server
+# Reticle Server
 
 This is the Java server backend for the **Reticle** Project Tracking Application.
 
 This project is based on an embedded **Jetty** server, using **Jersey** integration for RESTful services. The project was written with **Java 1.8** in mind, but should be compatible with later versions.
 
-#How To Run
+# How To Run
 
 From the project root, execute `mvn exec:java`. This will download the dependencies, build the project, and run the main class.
 
