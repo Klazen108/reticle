@@ -1,4 +1,4 @@
-package com.klazen.reticle;
+package com.klazen.reticle.coreproviders;
 
 import java.io.IOException;
 
@@ -15,6 +15,8 @@ import javax.ws.rs.ext.Provider;
 
 import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.auth0.jwt.interfaces.DecodedJWT;
+import com.klazen.reticle.JWTManager;
+import com.klazen.reticle.User;
 
 /**
  * Filter to ensure there is an authenticated token present in the 

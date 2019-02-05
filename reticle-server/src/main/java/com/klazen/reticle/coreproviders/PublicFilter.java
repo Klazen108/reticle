@@ -1,4 +1,4 @@
-package com.klazen.reticle;
+package com.klazen.reticle.coreproviders;
 
 import java.io.IOException;
 

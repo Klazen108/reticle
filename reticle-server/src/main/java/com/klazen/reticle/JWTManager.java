@@ -5,9 +5,15 @@ import java.util.Date;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
+import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import com.auth0.jwt.interfaces.JWTVerifier;
 
+/**
+ * Injectable, stateless bean to abstract JWT specifics from the app
+ * @author Chuck
+ *
+ */
 public class JWTManager {
     Algorithm algorithm = Algorithm.HMAC256("this is the server token secret, must be very secret!");
 
@@ -31,6 +37,13 @@ public class JWTManager {
     	return token;
     }
     
+    /**
+     * Verifies a token is legitimate, signed, and not expired.
+     * 
+     * @param token The token to verify
+     * @return The decoded token, if verified
+     * @throws JWTVerificationException if the token is not valid
+     */
     public DecodedJWT verify(String token) {
 	    JWTVerifier verifier = JWT.require(algorithm)
 	        .withIssuer("reticle")

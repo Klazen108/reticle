@@ -1,6 +1,7 @@
 package com.klazen.reticle;
 
 import com.auth0.jwt.interfaces.DecodedJWT;
+import com.klazen.reticle.coreproviders.Public;
 
 /**
  * CDI Bean containing information about the current user in the request
