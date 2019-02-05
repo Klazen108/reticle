@@ -178,7 +178,7 @@ export class ProjectService {
   archiveProject(project: Project): Observable<boolean> {
     return this.getArchive().pipe(mergeMap(archive => {
       archive.push(project);
-      return this.localStorage.setItem("archivedProjects",archive);
+      return this.localStorage.setItem("archivedProjects",JSON.stringify(archive));
     }));
   }
 
