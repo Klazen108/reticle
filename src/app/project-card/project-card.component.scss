@@ -67,8 +67,13 @@
     text-align: left;
 }
 
+.footer {
+    text-align: right;
+    margin-top: 0.5em;
+}
+
 .footer > * {
-    margin-right: 0.5em;
+    margin-left: 0.5em;
 }
 /*
 

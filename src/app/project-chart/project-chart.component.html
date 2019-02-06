@@ -37,9 +37,13 @@
     <div class="graph"
       [style.width]="graphWidth + 'px'">
       <div *ngFor="let phase of project.phases" 
-        class="phase"
-        [style.width]="width(phase)"
-        [style.margin-left]="marginLeft(phase)">{{phase.name}}&nbsp;</div>
+        class="phase-row">
+        <div class="phase"
+          [style.width]="width(phase)"
+          [style.margin-left]="marginLeft(phase)">
+            {{phase.name}}&nbsp;
+        </div>
+      </div>
     </div>
   </div>
 </div>

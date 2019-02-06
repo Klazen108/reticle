@@ -2,10 +2,16 @@
     width: 15em;
     overflow: hidden;
     display: inline-block;
+    padding-left: 0.3em;
+    padding-top: 0.3em;
 }
 
 .graph {
     display: inline-block;
+}
+
+.phase-row {
+    border-top: 1px solid black;
 }
 
 .phase {
@@ -13,6 +19,7 @@
     white-space: nowrap;
     overflow: hidden;
     font-size: xx-small;
+    line-height: 1.4em;
 }
 
 .project {
@@ -26,7 +33,7 @@
 }
 
 .today {
-    background-color: black; 
+    background-color: #888; 
     width: 2px; 
     position:absolute;
     top: 0;
