@@ -1,3 +1,29 @@
+
+
+<div>
+    <mat-form-field>
+        <input matInput [matDatepicker]="minPicker" 
+          class="date-selector date-input"
+          placeholder="Minimum Date" 
+          [(ngModel)]="minDate"
+          (ngModelChange)="updatePrefs()">
+        <mat-datepicker-toggle matSuffix [for]="minPicker"></mat-datepicker-toggle>
+        <mat-datepicker #minPicker></mat-datepicker>
+    </mat-form-field>
+      
+    <mat-form-field>
+      <input matInput [matDatepicker]="maxPicker" 
+        class="date-selector date-input"
+        placeholder="Maximum Date" 
+        [(ngModel)]="maxDate"
+        (ngModelChange)="updatePrefs()">
+      <mat-datepicker-toggle matSuffix [for]="maxPicker"></mat-datepicker-toggle>
+      <mat-datepicker #maxPicker></mat-datepicker>
+    </mat-form-field>
+
+    <button (click)="autosize(projects)" mat-raised-button color="accent">Autorange</button>
+  </div>
+
 <div class="container">
   <div style="height: 0;">
     <div class="label">&nbsp;</div>

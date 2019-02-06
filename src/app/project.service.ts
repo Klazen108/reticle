@@ -209,4 +209,15 @@ export class ProjectService {
       return projects;
       //new Project[](JSON.parse(json))
   }
+
+  getChartPreferences(): Observable<any> {
+    return this.getOrDefault("chartPrefs",
+      {minDate:"2018-12-1",maxDate:"2019-03-01"},
+      JSON.stringify,JSON.parse
+    );
+  }
+
+  setChartPreferences(prefs: any): Observable<boolean> {
+    return this.localStorage.setItem("chartPrefs",JSON.stringify(prefs));
+  }
 }

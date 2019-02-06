@@ -26,28 +26,13 @@ export class ProjectChartComponent implements OnInit {
     this.graphWidth = this.graphBlock.nativeElement.offsetWidth;
     console.log(this.graphWidth);
 
+    this.projectService.getChartPreferences().subscribe(prefs => {
+      this.minDate = moment(prefs.minDate);
+      this.maxDate = moment(prefs.maxDate);
+    });
+
     this.projectService.getProjects().subscribe(projects => {
       this.projects = projects;
-
-      let dateStream = this.projects
-        .map(p => p.phases) //stream of phase[]
-        .reduce((x,y) => x.concat(y), []) //stream of phase
-        .map(p => p.range) //stream of ranges
-        .filter(r => r != null) //exclude unspecified ranges
-        .map(r => [r.end,r.start]) //extract start, end
-        .reduce((x,y) => x.concat(y), []) //stream of dates
-        .filter(m => m != null) //exclude unspecified dates
-        .filter(m => m.isValid());
-        
-      this.minDate = dateStream
-        .reduce((min,cur) => moment.min([min,cur]), moment())
-        .startOf('day');
-      this.maxDate = dateStream
-        .reduce((max,cur) => moment.max([max,cur]), moment())
-        .endOf('day');
-
-        console.log(this.minDate);
-        console.log(this.maxDate);
     });
   }
 
@@ -55,23 +40,65 @@ export class ProjectChartComponent implements OnInit {
 
   }
 
+  autosize(projects: Project[]) {
+    let dateStream = projects
+      .map(p => p.phases) //stream of phase[]
+      .reduce((x,y) => x.concat(y), []) //stream of phase
+      .map(p => p.range) //stream of ranges
+      .filter(r => r != null) //exclude unspecified ranges
+      .map(r => [r.end,r.start]) //extract start, end
+      .reduce((x,y) => x.concat(y), []) //stream of dates
+      .filter(m => m != null) //exclude unspecified dates
+      .filter(m => m.isValid());
+      
+    this.minDate = dateStream
+      .reduce((min,cur) => moment.min([min,cur]), moment())
+      .startOf('day');
+    this.maxDate = dateStream
+      .reduce((max,cur) => moment.max([max,cur]), moment())
+      .endOf('day');
+
+    console.log(this.minDate);
+    console.log(this.maxDate);
+
+    this.updatePrefs();
+  }
+
+  updatePrefs() {
+    console.log("updating preferences")
+    this.projectService.setChartPreferences({
+      minDate:this.minDate,
+      maxDate:this.maxDate
+    }).subscribe();
+  }
+
   width(phase: Phase): string {
     if (
       phase.range.end   == null || !phase.range.end  .isValid() ||
       phase.range.start == null || !phase.range.start.isValid()
     ) return "0px";
+
+    if (phase.range.end.endOf('day') < this.minDate) return '0px';
     
     const fullWidth = this.maxDate.diff(this.minDate)
     const phaseWidth = phase.range.end.endOf('day').diff(phase.range.start.startOf('day'));
 
-    return (this.graphWidth * (phaseWidth/fullWidth)) + 'px'
+    let adj = this.marginLeftVal(phase);
+    if (adj > 0) adj = 0;
+    return (this.graphWidth * (phaseWidth/fullWidth) + adj) + 'px'
   }
 
   marginLeft(phase: Phase): string {
+    let adj = this.marginLeftVal(phase);
+    if (adj < 0) adj = 0;
+    return adj + 'px'
+  }
+
+  marginLeftVal(phase: Phase): number {
     const fullWidth = this.maxDate.diff(this.minDate)
     const phaseStart = phase.range.start.startOf('day').diff(this.minDate);
 
-    return (this.graphWidth * (phaseStart/fullWidth)) + 'px'
+    return (this.graphWidth * (phaseStart/fullWidth));
   }
 
   marginLeftToday(): string {
