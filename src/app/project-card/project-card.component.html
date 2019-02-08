@@ -52,7 +52,7 @@
           class="date-selector date-input"
           placeholder="Choose a date" 
           [(ngModel)]="phase.range.start"
-          (change)="update($event)" >
+          (ngModelChange)="update($event)" >
         <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
         <mat-datepicker #picker></mat-datepicker>
       </td>
@@ -74,7 +74,7 @@
           class="date-selector date-input"
           placeholder="Choose a date" 
           [(ngModel)]="phase.range.end"
-          (change)="update($event)">
+          (ngModelChange)="update($event)">
         <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
         <mat-datepicker #picker></mat-datepicker>
       </td>
