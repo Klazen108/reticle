@@ -31,6 +31,12 @@
     <servlet-name>Jetty Weld Jersey CDI Sample Servlet</servlet-name>
     <url-pattern>/api/*</url-pattern>
   </servlet-mapping>
+  
+  <listener>  
+	    <listener-class>
+	        com.klazen.reticle.ReticleServletListener
+	    </listener-class>
+	</listener>  
 
   <resource-env-ref>
         <resource-env-ref-name>BeanManager</resource-env-ref-name>

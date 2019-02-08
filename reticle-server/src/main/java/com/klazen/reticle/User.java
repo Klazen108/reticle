@@ -1,5 +1,7 @@
 package com.klazen.reticle;
 
+import javax.enterprise.context.RequestScoped;
+
 import com.auth0.jwt.interfaces.DecodedJWT;
 import com.klazen.reticle.coreproviders.Public;
 
@@ -9,6 +11,7 @@ import com.klazen.reticle.coreproviders.Public;
  * 
  * @author Chuck
  */
+@RequestScoped
 public class User {
 	private String username = null;
 	
