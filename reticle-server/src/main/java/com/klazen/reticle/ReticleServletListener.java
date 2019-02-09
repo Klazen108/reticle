@@ -3,6 +3,7 @@ package com.klazen.reticle;
 import java.sql.SQLException;
 import java.util.logging.Logger;
 
+import javax.inject.Inject;
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 
@@ -13,6 +14,8 @@ public class ReticleServletListener implements ServletContextListener {
 	
 	Logger LOGGER = Logger.getLogger(ReticleServletListener.class.getName());
 	
+	@Inject ConnectionManager connMgr;
+	
 	@Override
 	public void contextInitialized(ServletContextEvent sce) {
 		LOGGER.info("Initializing Context...");
@@ -20,6 +23,8 @@ public class ReticleServletListener implements ServletContextListener {
 			server = Server
 				.createTcpServer("-tcpPort", "31337", "-tcpAllowOthers")
 				.start();
+			
+			connMgr.init();
 		} catch (SQLException e) {
 			throw new RuntimeException(e);
 		}

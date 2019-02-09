@@ -9,19 +9,25 @@ import javax.enterprise.inject.Default;
 import javax.enterprise.inject.Disposes;
 import javax.enterprise.inject.Produces;
 
-import org.h2.jdbcx.JdbcDataSource;
+import org.apache.commons.dbcp2.BasicDataSource;
 
 @ApplicationScoped
-public class DBFacade {
+public class ConnectionManager {
+
+    private BasicDataSource ds = new BasicDataSource();
+    
+    public void init() {
+        ds.setUrl("jdbc:h2:~/test");
+        ds.setUsername("sa");
+        ds.setPassword("sa");
+        ds.setMinIdle(5);
+        ds.setMaxIdle(50);
+        ds.setMaxOpenPreparedStatements(100);
+    }
+	
 	@Produces @RequestScoped @Default
 	public Connection getConnection() throws SQLException {
-		//TODO: configure from context listener
-		JdbcDataSource ds = new JdbcDataSource();
-		ds.setURL("jdbc:h2:˜/test");
-		ds.setUser("sa");
-		ds.setPassword("sa");
-		Connection conn = ds.getConnection();
-		return conn;
+		return ds.getConnection();
 	}
 	
 	public void closeConnection(@Disposes Connection conn) throws SQLException {
