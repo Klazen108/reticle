@@ -34,7 +34,7 @@
   
   <listener>  
 	    <listener-class>
-	        com.klazen.reticle.ReticleServletListener
+	        com.klazen.reticle.db.ReticleDBInitListener
 	    </listener-class>
 	</listener>  
 

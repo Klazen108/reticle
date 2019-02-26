@@ -16,6 +16,7 @@ import { ImportDialogComponent } from './import-dialog/import-dialog.component';
 import { DefaultPhaseDialogComponent } from './default-phase-dialog/default-phase-dialog.component';
 import { RouterModule, Routes } from '@angular/router';
 import { ProjectChartComponent } from './project-chart/project-chart.component';
+import { HttpClientModule } from '@angular/common/http';
 
 const appRoutes: Routes = [
   { path: 'projects', component: ProjectListComponent },
@@ -42,6 +43,7 @@ const appRoutes: Routes = [
       { enableTracing: true } // <-- debugging purposes only
     ),
     BrowserModule,
+    HttpClientModule,
     BrowserAnimationsModule,
     MatCardModule,
     DragDropModule,

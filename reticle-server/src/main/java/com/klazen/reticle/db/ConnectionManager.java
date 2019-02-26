@@ -1,4 +1,4 @@
-package com.klazen.reticle;
+package com.klazen.reticle.db;
 
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -8,6 +8,8 @@ import javax.enterprise.context.RequestScoped;
 import javax.enterprise.inject.Default;
 import javax.enterprise.inject.Disposes;
 import javax.enterprise.inject.Produces;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 
 import org.apache.commons.dbcp2.BasicDataSource;
 
@@ -33,4 +35,16 @@ public class ConnectionManager {
 	public void closeConnection(@Disposes Connection conn) throws SQLException {
 		conn.close();
 	}
+
+    @Produces
+    @PersistenceContext
+    public EntityManager getEM() {
+    	return em;
+    }
+    
+    public void setEM(EntityManager em) {
+    	this.em = em;
+    }
+    
+    private EntityManager em;
 }

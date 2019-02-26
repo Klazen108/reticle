@@ -25,8 +25,11 @@ export class ProjectListComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    this.projectService.getProjects().subscribe(projects => {
+    /*this.projectService.getProjects().subscribe(projects => {
       this.cards = projects;
+    });*/
+    this.projectService.getDashboard(193).subscribe(db => {
+      this.cards = (db && db.projects) || [];
     });
   }
 

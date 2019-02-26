@@ -1,15 +1,20 @@
 import { Injectable } from '@angular/core';
 import { Project } from './project.model';
 import * as moment from 'moment';
-import { Observable, of } from 'rxjs';
+import { Observable, of, throwError } from 'rxjs';
 import { LocalStorage } from '@ngx-pwa/local-storage';
-import { mergeMap, map } from 'rxjs/operators';
+import { mergeMap, map, catchError } from 'rxjs/operators';
 import { Phase } from './phase.model';
+import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
+import { Profile } from './profile.model';
+import { Dashboard } from './dashboard.model';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ProjectService {
+
+  token: string = "";
 
   defaultPhases: Phase[] = [
     {
@@ -133,7 +138,10 @@ export class ProjectService {
     new Project({name:"Potential Project"})
   ];
 
-  constructor(protected localStorage: LocalStorage) {}
+  constructor(
+    protected localStorage: LocalStorage,
+    protected http: HttpClient
+  ) {}
 
   private getOrDefault<T>(key: string, defaultVal: T, encoder: (val: T)=>string, decoder: (val: string)=>T): Observable<T> {
     return this.localStorage.has(key).pipe(mergeMap(r => {
@@ -143,6 +151,67 @@ export class ProjectService {
           .pipe(mergeMap(r => this.localStorage.getItem<string>(key).pipe(mergeMap(x => of(decoder(x as string))))));
       };
     })) as Observable<T>;
+  }
+
+  private handleError(error: HttpErrorResponse): Observable<any> {
+    ///Enumerate any global error handlers here based on the http status code
+    const globalErrorHandlers: {[key:number]:(err:HttpErrorResponse)=>Observable<any>} = {
+      500: error => {
+        console.error(
+          `Server error: Backend returned code ${error.status}, ` +
+          `body was: ${error.error}`);
+        return throwError('Something bad happened; please try again later.');},
+      401: _ => {
+        this.token = ""; //user is unauthorized, token is bad
+        return throwError('Something bad happened; please try again later.')
+      },
+      404: _ => of(null)
+    };
+
+    if (error.error instanceof ErrorEvent) {
+      // A client-side or network error occurred. Handle it accordingly.
+      console.error('An error occurred:', error.error.message);
+    } else {
+      console.log(error);
+      const handler 
+        = globalErrorHandlers[error.status] 
+        || (_ => throwError('Something bad happened; please try again later.'));
+      return handler(error);
+    }
+    // return an observable with a user-facing error message
+    return throwError('Something bad happened; please try again later.');
+  };
+
+  login(username, password: string): Observable<Profile|any> {
+    return this.http.post<Profile>(
+      "/api/profile/login",
+      {username,password}
+    ).pipe(
+      catchError(this.handleError)
+    );
+  }
+
+  register(username,password): Observable<Profile|any>{
+    return this.http.post<Profile>(
+      "/api/profile/register",
+      {username,password}
+    ).pipe(
+      catchError(this.handleError)
+    );
+  }
+
+  getDashboard(dashboardId: number): Observable<Dashboard|any> {
+    const httpOptions = {
+      headers: new HttpHeaders({
+        'Content-Type':  'application/json',
+        'Authorization': this.token
+      })
+    };
+
+    return this.http.get<Dashboard>(`/api/dashboard/${dashboardId}`, httpOptions)
+    .pipe(
+      catchError(this.handleError)
+    );
   }
 
   getProjects(): Observable<Project[]> {
