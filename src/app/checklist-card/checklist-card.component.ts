@@ -48,6 +48,10 @@ export class ChecklistCardComponent implements OnInit {
     }
   }
 
+  delete() {
+    this.onDelete.emit(this.release);
+  }
+
   unDelete() {
     //TODO: need to be able to remove the project from the archive!
     this.release.components.splice(this.justDeletedIndex, 0, this.justDeleted);
