@@ -8,11 +8,12 @@ import { Phase } from './phase.model';
 import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
 import { Profile } from './profile.model';
 import { Dashboard } from './dashboard.model';
+import { AbstractListService } from './abstract-list.service';
 
 @Injectable({
   providedIn: 'root'
 })
-export class ProjectService {
+export class ProjectService extends AbstractListService<Project> {
 
   token: string = "";
 
@@ -141,16 +142,31 @@ export class ProjectService {
   constructor(
     protected localStorage: LocalStorage,
     protected http: HttpClient
-  ) {}
-
-  private getOrDefault<T>(key: string, defaultVal: T, encoder: (val: T)=>string, decoder: (val: string)=>T): Observable<T> {
-    return this.localStorage.has(key).pipe(mergeMap(r => {
-      if (r) return this.localStorage.getItem<string>(key).pipe(mergeMap(x => of(decoder(x as string))));
-      else {
-        return this.localStorage.setItem(key,encoder(defaultVal))
-          .pipe(mergeMap(r => this.localStorage.getItem<string>(key).pipe(mergeMap(x => of(decoder(x as string))))));
-      };
-    })) as Observable<T>;
+  ) {
+    super(localStorage);
+  }
+  
+  getDefault(): Project[] {
+    return this.projects;
+  }
+  decode(json: string): Project[] {
+    const jsonData = JSON.parse(json);
+    let projects: Project[] = [];
+    for (var i = 0; i < jsonData.length; i++) {
+      //console.log(jsonData[i]);
+      if (jsonData[i].phases) {
+        for (var j = 0; j < jsonData[i].phases.length; j++) {
+          jsonData[i].phases[j].range.start = moment(jsonData[i].phases[j].range.start);
+          jsonData[i].phases[j].range.end = moment(jsonData[i].phases[j].range.end);
+        }
+      }
+      projects.push(new Project(jsonData[i]));
+    }
+    return projects;
+    //new Project[](JSON.parse(json))
+  }
+  storageKey(): string {
+    return "projects";
   }
 
   private handleError(error: HttpErrorResponse): Observable<any> {
@@ -213,26 +229,7 @@ export class ProjectService {
       catchError(this.handleError)
     );
   }
-
-  getProjects(): Observable<Project[]> {
-    return this.getOrDefault("projects",this.projects,
-    (prj)=>JSON.stringify(prj),
-    this.decodeProjects
-    );
-  }
-
-  saveProjects(projects: Project[]) {
-    this.localStorage.setItemSubscribe("projects",JSON.stringify(projects));
-  }
-
-  getProjectsJson(): Observable<string> {
-    return this.getProjects().pipe(map(p => JSON.stringify(p)));
-  }
-
-  saveProjectsJson(projects: string): Observable<any> {
-    return this.localStorage.setItem("projects",projects);
-  }
-
+  
   getDefaultPhases(): Observable<Phase[]> {
   return this.getOrDefault("defaultPhases",this.defaultPhases,
       (phases)=>JSON.stringify(phases),
@@ -254,29 +251,8 @@ export class ProjectService {
   getArchive(): Observable<Project[]> {
     return this.getOrDefault("archivedProjects",[],
       (archive)=>JSON.stringify(archive),
-      this.decodeProjects
+      this.decode
     )
-  }
-
-  /**
-   * Decoder for an array of projects
-   * @param json 
-   */
-  private decodeProjects(json: string): Project[] {
-      const jsonData = JSON.parse(json);
-      let projects: Project[] = [];
-      for (var i = 0; i < jsonData.length; i++) {
-        //console.log(jsonData[i]);
-        if (jsonData[i].phases) {
-          for (var j = 0; j < jsonData[i].phases.length; j++) {
-            jsonData[i].phases[j].range.start = moment(jsonData[i].phases[j].range.start);
-            jsonData[i].phases[j].range.end = moment(jsonData[i].phases[j].range.end);
-          }
-        }
-        projects.push(new Project(jsonData[i]));
-      }
-      return projects;
-      //new Project[](JSON.parse(json))
   }
 
   getChartPreferences(): Observable<any> {

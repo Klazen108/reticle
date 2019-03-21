@@ -1,0 +1,22 @@
+
+
+
+<div class="body">
+  <div class="header">
+      <button (click)="addProject()" mat-stroked-button>Add Release</button>
+      <button (click)="exportProjects()" mat-stroked-button>Export Releases</button>
+      <button (click)="importProjects()" mat-stroked-button>Import Releases</button>
+  </div>
+  <div class="example-list"
+  (cdkDropListDropped)="dropped($event)"
+  cdkDropList>
+    <div class="example-box"
+      *ngFor="let release of releases"
+      cdkDrag>
+        <app-checklist-card
+        [(release)]="release"
+        (onUpdate)="onUpdate($event)"
+        (onDelete)="onDelete($event)"></app-checklist-card>
+    </div>
+  </div>
+</div>

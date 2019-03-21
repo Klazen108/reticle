@@ -40,7 +40,7 @@ export class ProjectListComponent implements OnInit {
 
     //of(this.cards).pipe(debounceTime(1000*10)).subscribe(p => {
       console.log("save time!");
-      this.projectService.saveProjects(this.cards);
+      this.projectService.saveList(this.cards);
     //});
   }
 
@@ -95,11 +95,11 @@ export class ProjectListComponent implements OnInit {
 
   saveList() {
     console.log("saving");
-    this.projectService.saveProjects(this.cards);
+    this.projectService.saveList(this.cards);
   }
 
   exportProjects() {
-    this.projectService.getProjectsJson().subscribe(s => {
+    this.projectService.getListJson().subscribe(s => {
       let uri = (webkitURL).createObjectURL(new Blob([s],{type:"application/octet-stream"}))
       console.log(uri);
       console.log(s);
@@ -123,8 +123,8 @@ export class ProjectListComponent implements OnInit {
           return;
         }
 
-        this.projectService.saveProjectsJson(result)
-        .subscribe(() => this.projectService.getProjects()
+        this.projectService.saveListJson(result)
+        .subscribe(() => this.projectService.getList()
         .subscribe(projects => this.cards = projects));
       }
     });

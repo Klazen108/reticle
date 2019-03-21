@@ -31,7 +31,7 @@ export class ProjectChartComponent implements OnInit {
       this.maxDate = moment(prefs.maxDate);
     });
 
-    this.projectService.getProjects().subscribe(projects => {
+    this.projectService.getList().subscribe(projects => {
       this.projects = projects;
     });
   }
