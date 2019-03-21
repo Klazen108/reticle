@@ -3,7 +3,7 @@ import { Project } from './project.model';
 import * as moment from 'moment';
 import { Observable, of, throwError } from 'rxjs';
 import { LocalStorage } from '@ngx-pwa/local-storage';
-import { mergeMap, map, catchError } from 'rxjs/operators';
+import { catchError } from 'rxjs/operators';
 import { Phase } from './phase.model';
 import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
 import { Profile } from './profile.model';
@@ -239,20 +239,6 @@ export class ProjectService extends AbstractListService<Project> {
 
   saveDefaultPhases(phases: Phase[]): Observable<any> {
     return this.localStorage.setItem("defaultPhases",JSON.stringify(phases));
-  }
-
-  archiveProject(project: Project): Observable<boolean> {
-    return this.getArchive().pipe(mergeMap(archive => {
-      archive.push(project);
-      return this.localStorage.setItem("archivedProjects",JSON.stringify(archive));
-    }));
-  }
-
-  getArchive(): Observable<Project[]> {
-    return this.getOrDefault("archivedProjects",[],
-      (archive)=>JSON.stringify(archive),
-      this.decode
-    )
   }
 
   getChartPreferences(): Observable<any> {

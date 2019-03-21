@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
+import { ReleaseComponent } from '../release-component.model';
 
 @Component({
   selector: 'app-release-component',
@@ -6,6 +7,7 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./release-component.component.scss']
 })
 export class ReleaseComponentComponent implements OnInit {
+  @Input() component: ReleaseComponent;
 
   constructor() { }
 

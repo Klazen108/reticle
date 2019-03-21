@@ -1,5 +1,6 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { Release } from '../release.model';
+import { ReleaseComponent } from '../release-component.model';
 
 @Component({
   selector: 'app-checklist-card',
@@ -14,6 +15,11 @@ export class ChecklistCardComponent implements OnInit {
   constructor() { }
 
   ngOnInit() {
+  }
+
+  addComponent() {
+    this.release.components.push(new ReleaseComponent({name:"New Release Component"}));
+    this.onUpdate.emit(this.release);
   }
 
 }

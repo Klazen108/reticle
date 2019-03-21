@@ -25,12 +25,12 @@ export class ProjectListComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    /*this.projectService.getProjects().subscribe(projects => {
+    this.projectService.getList().subscribe(projects => {
       this.cards = projects;
-    });*/
-    this.projectService.getDashboard(193).subscribe(db => {
-      this.cards = (db && db.projects) || [];
     });
+    /*this.projectService.getDashboard(193).subscribe(db => {
+      this.cards = (db && db.projects) || [];
+    });*/
   }
 
   dropped(event: CdkDragDrop<string[]>) {
@@ -60,7 +60,7 @@ export class ProjectListComponent implements OnInit {
   onDelete(project: Project) {
     var index = this.cards.indexOf(project);
     if (index > -1) {
-      this.projectService.archiveProject(project).subscribe(success => {
+      this.projectService.archive(project).subscribe(success => {
         if (!success) {
           this.snackBar.open(`Error archiving!`, "OK", {
             duration: 10000,

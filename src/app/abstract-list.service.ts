@@ -60,6 +60,38 @@ export abstract class AbstractListService<T> {
   saveListJson(list: string): Observable<any> {
     return this.localStorage.setItem(this.storageKey(),list);
   }
+
+  /**
+   * Adds an item to the archive list. The archived items do not return in the normal
+   * list, but you will need to remove it from the normal list first.
+   * 
+   * @param item The object to add to the archive
+   */
+  archive(item: T): Observable<boolean> {
+    return this.getArchive().pipe(mergeMap(archive => {
+      archive.push(item);
+
+      //I was a dingus and used camelcase so lets keep it going
+      let key = this.storageKey();
+      key = "archived"+key.charAt(0).toUpperCase() + key.slice(1);
+
+      return this.localStorage.setItem(key,JSON.stringify(archive));
+    }));
+  }
+
+  /**
+   * Gets an "archive" list of objects
+   */
+  getArchive(): Observable<T[]> {
+    //I was a dingus and used camelcase so lets keep it going
+    let key = this.storageKey();
+    key = "archived"+key.charAt(0).toUpperCase() + key.slice(1);
+
+    return this.getOrDefault(key,[],
+      (archive)=>JSON.stringify(archive),
+      this.decode
+    )
+  }
   
   protected getOrDefault<T>(key: string, defaultVal: T, encoder: (val: T)=>string, decoder: (val: string)=>T): Observable<T> {
     return this.localStorage.has(key).pipe(mergeMap(r => {

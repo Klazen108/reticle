@@ -13,6 +13,9 @@ import { ReleaseService } from '../release.service';
 export class ChecklistComponent implements OnInit {
 
   releases: Release[] = [];
+  
+  justDeleted: Release = null;
+  justDeletedIndex: number = 0;
 
   constructor(
     private releaseService: ReleaseService,
@@ -79,6 +82,47 @@ export class ChecklistComponent implements OnInit {
       console.log("save time!");
       this.releaseService.saveList(this.releases);
     //});
+  }
+  
+
+  onUpdate(release: Release) {
+    this.saveList();
+  }
+
+  onDelete(release: Release) {
+    var index = this.releases.indexOf(release);
+    if (index > -1) {
+      this.releaseService.archive(release).subscribe(success => {
+        if (!success) {
+          this.snackBar.open(`Error archiving!`, "OK", {
+            duration: 10000,
+          }).onAction().subscribe();
+          return;
+        }
+
+        this.releases.splice(index, 1);
+        this.justDeleted = release;
+        this.justDeletedIndex = index;
+  
+        this.saveList();
+        this.snackBar.open(`Release "${release.name}" archived`, "Undo", {
+          duration: 10000,
+        }).onAction().subscribe(() => this.unDelete());
+        return;
+      });
+    }
+  }
+
+  unDelete() {
+    //TODO: need to be able to remove the project from the archive!
+    this.releases.splice(this.justDeletedIndex, 0, this.justDeleted);
+    this.justDeleted = null;
+    this.justDeletedIndex = 0;
+    this.saveList();
+    
+    this.snackBar.open(`Release "${this.justDeleted.name}" restored`, "OK", {
+      duration: 3000,
+    }).onAction().subscribe();
   }
 
 }
