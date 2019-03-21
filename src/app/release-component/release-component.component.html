@@ -1,1 +1,18 @@
-{{component.name}}
+<mat-card>
+    <div>
+        <input type="text" [(ngModel)]="component.name">
+        <select>
+            <option>SQL Script</option>
+            <option>DDL Update</option>
+            <option>MOTI Package</option>
+            <option>JCL Job</option>
+            <option>Java Branch</option>
+        </select>
+        Artifact: 
+        <input type="text">
+        <button (click)="delete()" mat-raised-button color="accent">Delete</button>
+    </div>
+    <div>
+        <textarea></textarea>
+    </div>
+</mat-card>

@@ -7,12 +7,12 @@
       <button (click)="exportProjects()" mat-stroked-button>Export Releases</button>
       <button (click)="importProjects()" mat-stroked-button>Import Releases</button>
   </div>
-  <div class="example-list"
-  (cdkDropListDropped)="dropped($event)"
-  cdkDropList>
+  <div class="example-list">
+  <!-- (cdkDropListDropped)="dropped($event)"
+  cdkDropList> -->
     <div class="example-box"
-      *ngFor="let release of releases"
-      cdkDrag>
+      *ngFor="let release of releases">
+      <!--cdkDrag> -->
         <app-checklist-card
         [(release)]="release"
         (onUpdate)="onUpdate($event)"

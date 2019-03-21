@@ -1,13 +1,17 @@
-<div>
-
+<mat-card class="card"> 
   <div class="header">
+    <div>
+      {{release.name}}
+    </div>
     <button (click)="addComponent()" mat-raised-button color="accent">Add Component</button>
+    <button (click)="delete()" mat-raised-button color="accent">Archive</button>
   </div>
 
-{{release.name}}
 <div *ngFor="let component of release.components">
   <app-release-component
     [(component)]="component"
+    (onUpdate)="onCompUpdate($event)"
+    (onDelete)="onCompDelete($event)"
   ></app-release-component>
 </div>
-</div>
+</mat-card>

@@ -1,0 +1,37 @@
+.header{
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    justify-content: space-between;
+    padding: 5px;
+    border-radius: 10px;
+  }
+  
+  .header button,
+  .header div {
+    margin-right: 8px;
+    margin-left: 8px;
+  }
+  
+  .header div {
+      font-size: x-large;
+      font-weight: bold;
+  }
+  
+  .title {
+      font-size: large;
+  }
+  
+  .card {
+      margin: 1em;
+  }
+  
+  .footer {
+      text-align: right;
+      margin-top: 0.5em;
+  }
+  
+  .footer > * {
+      margin-left: 0.5em;
+  }
+  
