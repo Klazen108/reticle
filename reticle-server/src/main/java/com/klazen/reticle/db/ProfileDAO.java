@@ -12,10 +12,10 @@ import javax.persistence.EntityManager;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+
+import com.klazen.reticle.project.Project;
 
 public class ProfileDAO {
     @Inject EntityManager em;
@@ -85,35 +85,6 @@ public class ProfileDAO {
 	    @OneToMany(mappedBy="dashboard")
 	    //@JoinColumn(name = "DASHBOARD_ID")
 		public List<Project> projects;
-	}
-
-	@Entity
-	@Table(name = "PROJECT")
-	public static class Project {
-	    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-	    @Column(name = "id")
-		public Integer id;
-	    
-	    @Column(name = "NAME")
-	    public String name;
-	    @Column(name = "BRANCH")
-	    public String branch;
-	    @Column(name = "RELEASE")
-	    public String release;
-	    @Column(name = "PROJECT")
-	    public String project;
-	    @Column(name = "GC")
-	    public String gc;
-	    @Column(name = "FOLDER")
-	    public String folder;
-
-	    @ManyToOne
-	    @JoinColumn(name="DASHBOARD_ID", nullable=false)
-	    public Dashboard dashboard;
-	    
-	    @OneToMany(cascade = CascadeType.ALL)
-	    @JoinColumn(name = "PROJECT_ID")
-	    public List<Phase> phases;
 	}
 
 	@Entity

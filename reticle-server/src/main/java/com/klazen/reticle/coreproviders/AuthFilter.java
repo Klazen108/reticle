@@ -15,8 +15,8 @@ import javax.ws.rs.ext.Provider;
 
 import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.auth0.jwt.interfaces.DecodedJWT;
-import com.klazen.reticle.JWTManager;
-import com.klazen.reticle.User;
+import com.klazen.reticle.core.JWTManager;
+import com.klazen.reticle.core.User;
 
 /**
  * Filter to ensure there is an authenticated token present in the 

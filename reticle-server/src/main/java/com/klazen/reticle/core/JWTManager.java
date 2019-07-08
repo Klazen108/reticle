@@ -1,4 +1,4 @@
-package com.klazen.reticle;
+package com.klazen.reticle.core;
 
 import java.util.Calendar;
 import java.util.Date;

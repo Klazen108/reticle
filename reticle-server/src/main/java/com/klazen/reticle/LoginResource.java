@@ -8,6 +8,8 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
+import com.klazen.reticle.core.JWTManager;
+import com.klazen.reticle.core.User;
 import com.klazen.reticle.coreproviders.Public;
 
 /**

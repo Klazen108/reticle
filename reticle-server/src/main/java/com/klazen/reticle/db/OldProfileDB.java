@@ -8,7 +8,7 @@ import java.util.List;
 import javax.inject.Inject;
 
 @Deprecated
-public class ProfileDB {
+public class OldProfileDB {
 	@Inject Connection conn;
 	
 	public Profile getProfile(int profileId) throws SQLException {
