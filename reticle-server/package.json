@@ -1,0 +1,30 @@
+{
+  "name": "reticle-server",
+  "version": "0.0.1",
+  "description": "server for reticle",
+  "main": "index.js",
+  "scripts": {
+    "start": "ts-node src/index.ts",
+    "dev": "nodemon",
+    "test": "ts-mocha -R spec src/test/**/*.ts",
+    "test-int": "ts-mocha -R spec src/int-test/**/*.ts",
+    "tsc": "tsc",
+    "start-plain": "node build/server.js",
+    "docker-reboot": "docker build -t delfruit-server . && docker kill df-server & docker rm df-server & docker run -d --name df-server --network df-network -p 4201:4201 -v D:\\Projects\\delfruit2-server\\config:/home/node/app/config delfruit-server"
+  },
+  "author": "Klazen108",
+  "license": "ISC",
+  "dependencies": {
+    "@types/express": "^4.17.0",
+    "@types/mongodb": "^3.1.28",
+    "@types/mongoose": "^5.5.7",
+    "body-parser": "^1.19.0",
+    "express": "^4.17.1",
+    "mongodb": "^3.2.7",
+    "mongoose": "^5.6.4"
+  },
+  "devDependencies": {
+    "eslint": "^6.0.1",
+    "ts-node": "^8.3.0"
+  }
+}
