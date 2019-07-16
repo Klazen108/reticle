@@ -30,7 +30,7 @@ app.patch('/:id', async (req, res) => {
 });*/
 dbRouter.get('/:id', async (req, res, next) => {
   try {
-    const db = await Dashboard.findById(req.params.id).exec();
+    const db = await Dashboard.findById(req.params.id).populate('projects').exec();
     res.send(db);
   } catch (err) {
     next(err);
@@ -82,9 +82,9 @@ pjRouter.get('/', async (req, res, next) => {
   }
 });
 
-app.use('/dashboard',dbRouter);
-app.use('/project',pjRouter);
+app.use('/api/dashboard',dbRouter);
+app.use('/api/project',pjRouter);
 
-app.listen(8000, () => {
-  console.log('Example app listening on port 8000!')
+app.listen(8080, () => {
+  console.log('Example app listening on port 8080!')
 });

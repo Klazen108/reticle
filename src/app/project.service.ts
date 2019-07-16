@@ -216,7 +216,7 @@ export class ProjectService extends AbstractListService<Project> {
     );
   }
 
-  getDashboard(dashboardId: number): Observable<Dashboard|any> {
+  getDashboard(dashboardId: string): Observable<Dashboard> {
     const httpOptions = {
       headers: new HttpHeaders({
         'Content-Type':  'application/json',

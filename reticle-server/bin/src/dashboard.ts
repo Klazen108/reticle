@@ -8,7 +8,7 @@ export interface IDashboard extends mongoose.Document {
 }
 export const DashboardSchema = new mongoose.Schema({
     name: { type: String, required: true },
-    projects: { type: Array, required: true }
+    projects: [{ type: mongoose.Schema.Types.ObjectId, ref: "Project" }]
 });
 
 const Book = mongoose.model<IDashboard>("Dashboard", DashboardSchema);
