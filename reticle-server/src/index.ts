@@ -51,18 +51,18 @@ pjRouter.put('/', async (req, res, next) => {
   res.status(201).send(db);
 });
 
-/*
-app.patch('/:id', async (req, res) => {
-  const db = await getDb();
-  const result = db.collection('Dashboard').update(
-    { _id : req.params.id },
-    { $set : req.body },
-    function( err, result ) {
-        if ( err ) throw err;
-    }
-);
-  res.send('Hello World!')
-});*/
+pjRouter.patch('/:id', async (req, res) => {
+  const db = await Project.update(
+      { _id : req.params.id },
+      { $set : req.body },
+      function( err, result ) {
+          if ( err ) throw err;
+      }
+  );
+  res.send(db)
+});
+
+
 pjRouter.get('/:id', async (req, res, next) => {
   try {
     const db = await Project.findById(req.params.id).exec();

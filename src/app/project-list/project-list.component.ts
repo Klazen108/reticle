@@ -95,7 +95,7 @@ export class ProjectListComponent implements OnInit {
 
   saveList() {
     console.log("saving");
-    this.projectService.saveList(this.cards);
+    this.projectService.saveList(this.cards).subscribe(c => this.cards = c);
   }
 
   exportProjects() {

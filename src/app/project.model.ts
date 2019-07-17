@@ -1,6 +1,7 @@
 import { Phase } from "./phase.model";
+import { MongooseModel } from "./abstract-list.service";
 
-export class Project {
+export class Project implements MongooseModel {
     _id: string;
     name: string;
     branch?: string;

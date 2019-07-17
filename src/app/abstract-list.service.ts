@@ -1,13 +1,17 @@
 import { Injectable } from '@angular/core';
-import { Observable, of } from 'rxjs';
+import { Observable, of, forkJoin } from 'rxjs';
 import { LocalStorage } from '@ngx-pwa/local-storage';
-import { mergeMap, map, catchError } from 'rxjs/operators';
+import { mergeMap, map, catchError, combineLatest } from 'rxjs/operators';
 import { HttpHeaders, HttpClient } from '@angular/common/http';
+
+export interface MongooseModel {
+  _id: string
+}
 
 @Injectable({
   providedIn: 'root'
 })
-export abstract class AbstractListService<T> {
+export abstract class AbstractListService<T extends MongooseModel> {
 
   constructor(
     protected localStorage: LocalStorage,
@@ -41,11 +45,6 @@ export abstract class AbstractListService<T> {
     };
 
     return this.http.get<T[]>(this.url, httpOptions);
-
-    /*return this.getOrDefault(this.storageKey(),this.getDefault(),
-    (prj)=>JSON.stringify(prj),
-    this.decode
-    );*/
   }
 
   /**
@@ -53,8 +52,17 @@ export abstract class AbstractListService<T> {
    * 
    * @param list The list of objects to save
    */
-  saveList(list: T[]) {
-    this.localStorage.setItemSubscribe(this.storageKey(),JSON.stringify(list));
+  saveList(list: T[]): Observable<T[]> {
+    const httpOptions = {
+      headers: new HttpHeaders({
+        'Content-Type':  'application/json'//,
+        //'Authorization': this.token
+      })
+    };
+    return forkJoin(list.map(item => {
+      if (item._id) return this.http.patch<T>(`${this.url}/${item._id}`, item, httpOptions)
+      else return this.http.put<T>(`${this.url}`, item, httpOptions)
+    }))
   }
 
   /**

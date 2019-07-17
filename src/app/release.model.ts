@@ -1,7 +1,8 @@
 import { ReleaseComponent } from "./release-component.model";
+import { MongooseModel } from "./abstract-list.service";
 
-export class Release {
-    id: string;
+export class Release implements MongooseModel {
+    _id: string;
     name: string;
 
     components: ReleaseComponent[] = [];
