@@ -143,7 +143,7 @@ export class ProjectService extends AbstractListService<Project> {
     protected localStorage: LocalStorage,
     protected http: HttpClient
   ) {
-    super(localStorage);
+    super(localStorage,http,'/api/project');
   }
   
   getDefault(): Project[] {
@@ -225,6 +225,20 @@ export class ProjectService extends AbstractListService<Project> {
     };
 
     return this.http.get<Dashboard>(`/api/dashboard/${dashboardId}`, httpOptions)
+    .pipe(
+      catchError(this.handleError)
+    );
+  }
+
+  patchDashboard(dashboard: Dashboard): Observable<Dashboard> {
+    const httpOptions = {
+      headers: new HttpHeaders({
+        'Content-Type':  'application/json',
+        'Authorization': this.token
+      })
+    };
+
+    return this.http.patch<Dashboard>(`/api/dashboard/${dashboard.id}`, dashboard, httpOptions)
     .pipe(
       catchError(this.handleError)
     );

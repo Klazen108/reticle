@@ -1,6 +1,7 @@
 import { Phase } from "./phase.model";
 
 export class Project {
+    _id: string;
     name: string;
     branch?: string;
     release?: string;

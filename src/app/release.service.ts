@@ -13,7 +13,7 @@ export class ReleaseService extends AbstractListService<Release> {
   constructor(
     protected localStorage: LocalStorage,
   ) {
-    super(localStorage);
+    super(localStorage,null,null);
   }
 
   getDefault(): Release[] {

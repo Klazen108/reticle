@@ -1,7 +1,7 @@
 import { Project } from "./project.model";
 
 export class Dashboard {
-    id: number;
+    id: string;
     profile: number;
     projects: Project[];
 

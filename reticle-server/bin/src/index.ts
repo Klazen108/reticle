@@ -16,18 +16,17 @@ dbRouter.put('/', async (req, res, next) => {
   res.status(201).send(db);
 });
 
-/*
-app.patch('/:id', async (req, res) => {
-  const db = await getDb();
-  const result = db.collection('Dashboard').update(
-    { _id : req.params.id },
-    { $set : req.body },
-    function( err, result ) {
-        if ( err ) throw err;
-    }
-);
-  res.send('Hello World!')
-});*/
+
+dbRouter.patch('/:id', async (req, res) => {
+  const db = await Dashboard.update(
+      { _id : req.params.id },
+      { $set : req.body },
+      function( err, result ) {
+          if ( err ) throw err;
+      }
+  );
+  res.send(db)
+});
 dbRouter.get('/:id', async (req, res, next) => {
   try {
     const db = await Dashboard.findById(req.params.id).populate('projects').exec();

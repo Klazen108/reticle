@@ -1,7 +1,8 @@
 import { Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
 import { LocalStorage } from '@ngx-pwa/local-storage';
-import { mergeMap, map } from 'rxjs/operators';
+import { mergeMap, map, catchError } from 'rxjs/operators';
+import { HttpHeaders, HttpClient } from '@angular/common/http';
 
 @Injectable({
   providedIn: 'root'
@@ -10,6 +11,8 @@ export abstract class AbstractListService<T> {
 
   constructor(
     protected localStorage: LocalStorage,
+    protected http: HttpClient,
+    protected url: string
   ) {}
 
   /**
@@ -30,10 +33,19 @@ export abstract class AbstractListService<T> {
   abstract storageKey(): string;
 
   getList(): Observable<T[]> {
-    return this.getOrDefault(this.storageKey(),this.getDefault(),
+    const httpOptions = {
+      headers: new HttpHeaders({
+        'Content-Type':  'application/json'//,
+        //'Authorization': this.token
+      })
+    };
+
+    return this.http.get<T[]>(this.url, httpOptions);
+
+    /*return this.getOrDefault(this.storageKey(),this.getDefault(),
     (prj)=>JSON.stringify(prj),
     this.decode
-    );
+    );*/
   }
 
   /**
