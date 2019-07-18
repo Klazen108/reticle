@@ -50,43 +50,43 @@ export class ProjectService extends AbstractListService<Project> {
         {
           name: "Detail Design", 
           range: {
-            start: moment("2019-01-09"),
-            end: moment("2019-01-09")
+            start: "2019-01-09",
+            end: "2019-01-09"
           }
         },
         {
           name: "Story Planning", 
           range: {
-            start: moment("2019-01-09"),
-            end: moment("2019-01-09")
+            start: "2019-01-09",
+            end: "2019-01-09"
           }
         },
         {
           name: "Development", 
           range: {
-            start: moment("2019-01-09"),
-            end: moment("2019-01-11")
+            start: "2019-01-09",
+            end: "2019-01-11"
           }
         },
         {
           name: "Testing", 
           range: {
-            start: moment("2019-01-11"),
-            end: moment("2019-01-11")
+            start: "2019-01-11",
+            end: "2019-01-11"
           }
         },
         {
           name: "QAT", 
           range: {
-            start: moment("2019-01-11"),
-            end: moment("2019-01-11")
+            start: "2019-01-11",
+            end: "2019-01-11"
           }
         },
         {
           name: "Deploy", 
           range: {
-            start: moment("2019-01-14"),
-            end: moment("2019-01-14")
+            start: "2019-01-14",
+            end: "2019-01-14"
           }
         },
       ]
@@ -96,43 +96,43 @@ export class ProjectService extends AbstractListService<Project> {
       {
         name: "Detail Design", 
         range: {
-          start: moment("2019-01-09"),
-          end: moment("2019-01-09")
+          start: "2019-01-09",
+          end: "2019-01-09"
         }
       },
       {
         name: "Story Planning", 
         range: {
-          start: moment("2019-01-09"),
-          end: moment("2019-01-09")
+          start: "2019-01-09",
+          end: "2019-01-09"
         }
       },
       {
         name: "Development", 
         range: {
-          start: moment("2018-12-20"),
-          end: moment("2019-01-01")
+          start: "2018-12-20",
+          end: "2019-01-01"
         }
       },
       {
         name: "Testing", 
         range: {
-          start: moment("2019-01-02"),
-          end: moment("2019-01-08")
+          start: "2019-01-02",
+          end: "2019-01-08"
         }
       },
       {
         name: "QAT", 
         range: {
-          start: moment("2019-01-09"),
-          end: moment("2019-01-22")
+          start: "2019-01-09",
+          end: "2019-01-22"
         }
       },
       {
         name: "Deploy", 
         range: {
-          start: moment("2019-01-22"),
-          end: moment("2019-01-23")
+          start: "2019-01-22",
+          end: "2019-01-23"
         }
       },
     ]}),

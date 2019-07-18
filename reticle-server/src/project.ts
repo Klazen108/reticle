@@ -30,7 +30,13 @@ export const ProjectSchema = new mongoose.Schema({
     project: { type: String, required: false },
     gc: { type: String, required: false },
     folder: { type: String, required: false },
-    phases: { type: Array, required: true }
+    phases: { type: [new mongoose.Schema({
+        name: { type: String, required: true },
+        range: { type: new mongoose.Schema({
+            start: { type: String, required: false },
+            end: { type: String, required: false },
+        }), required: true }
+    })], required: true }
 });
 
 const Project = mongoose.model<IProject>("Project", ProjectSchema);

@@ -35,7 +35,7 @@ export class ProjectCardComponent implements OnInit {
   phases(): Phase[] {
     if (this.expanded) return this.project.phases;
     else {
-      return this.project.phases.filter(p => !p.range || !p.range.end || p.range.end.isAfter(this.curTime));
+      return this.project.phases.filter(p => !p.range || !p.range.end || moment(p.range.end).isAfter(this.curTime));
     }
   }
 
@@ -64,14 +64,18 @@ export class ProjectCardComponent implements OnInit {
     this.timerSubscription.unsubscribe();
   }
 
-  dateDiff(from: moment.Moment, to: moment.Moment): number {
+  dateDiff(from: string, to: string): number {
+    return this.dateDiff2(moment(from),to);
+  }
+
+  dateDiff2(from: moment.Moment, to: string): number {
     if (from == null || to == null) return 0;
-    var duration = moment.duration(to.diff(from));
+    var duration = moment.duration(moment(to).diff(moment(from)));
     return Math.ceil(duration.asDays());
   }
 
-  until(date: moment.Moment): number {
-    return this.dateDiff(this.curTime,date);
+  until(date: string): number {
+    return this.dateDiff2(this.curTime,date);
   }
 
   within(from: Date, to: Date): boolean {

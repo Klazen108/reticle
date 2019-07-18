@@ -49,13 +49,13 @@ export class ProjectChartComponent implements OnInit {
       .map(r => [r.end,r.start]) //extract start, end
       .reduce((x,y) => x.concat(y), []) //stream of dates
       .filter(m => m != null) //exclude unspecified dates
-      .filter(m => m.isValid());
+      .filter(m => moment(m).isValid());
       
     this.minDate = dateStream
-      .reduce((min,cur) => moment.min([min,cur]), moment())
+      .reduce((min,cur) => moment.min([min,moment(cur)]), moment())
       .startOf('day');
     this.maxDate = dateStream
-      .reduce((max,cur) => moment.max([max,cur]), moment())
+      .reduce((max,cur) => moment.max([max,moment(cur)]), moment())
       .endOf('day');
 
     console.log(this.minDate);
@@ -74,14 +74,14 @@ export class ProjectChartComponent implements OnInit {
 
   width(phase: Phase): string {
     if (
-      phase.range.end   == null || !phase.range.end  .isValid() ||
-      phase.range.start == null || !phase.range.start.isValid()
+      phase.range.end   == null || !moment(phase.range.end  ).isValid() ||
+      phase.range.start == null || !moment(phase.range.start).isValid()
     ) return "0px";
 
-    if (phase.range.end.endOf('day') < this.minDate) return '0px';
+    if (moment(phase.range.end).endOf('day') < this.minDate) return '0px';
     
     const fullWidth = this.maxDate.diff(this.minDate)
-    const phaseWidth = phase.range.end.endOf('day').diff(phase.range.start.startOf('day'));
+    const phaseWidth = moment(phase.range.end).endOf('day').diff(moment(phase.range.start).startOf('day'));
 
     let adj = this.marginLeftVal(phase);
     if (adj > 0) adj = 0;
@@ -96,7 +96,7 @@ export class ProjectChartComponent implements OnInit {
 
   marginLeftVal(phase: Phase): number {
     const fullWidth = this.maxDate.diff(this.minDate)
-    const phaseStart = phase.range.start.startOf('day').diff(this.minDate);
+    const phaseStart = moment(phase.range.start).startOf('day').diff(this.minDate);
 
     return (this.graphWidth * (phaseStart/fullWidth));
   }

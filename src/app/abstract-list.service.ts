@@ -3,6 +3,7 @@ import { Observable, of, forkJoin } from 'rxjs';
 import { LocalStorage } from '@ngx-pwa/local-storage';
 import { mergeMap, map, catchError, combineLatest } from 'rxjs/operators';
 import { HttpHeaders, HttpClient } from '@angular/common/http';
+import { Project } from './project.model';
 
 export interface MongooseModel {
   _id: string
@@ -43,7 +44,6 @@ export abstract class AbstractListService<T extends MongooseModel> {
         //'Authorization': this.token
       })
     };
-
     return this.http.get<T[]>(this.url, httpOptions);
   }
 
