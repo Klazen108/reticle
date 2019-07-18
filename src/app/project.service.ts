@@ -44,101 +44,6 @@ export class ProjectService extends AbstractListService<Project> {
     },
   ];
 
-  projects: Project[] =[
-    new Project({name:"Example Project", 
-      phases:[
-        {
-          name: "Detail Design", 
-          range: {
-            start: "2019-01-09",
-            end: "2019-01-09"
-          }
-        },
-        {
-          name: "Story Planning", 
-          range: {
-            start: "2019-01-09",
-            end: "2019-01-09"
-          }
-        },
-        {
-          name: "Development", 
-          range: {
-            start: "2019-01-09",
-            end: "2019-01-11"
-          }
-        },
-        {
-          name: "Testing", 
-          range: {
-            start: "2019-01-11",
-            end: "2019-01-11"
-          }
-        },
-        {
-          name: "QAT", 
-          range: {
-            start: "2019-01-11",
-            end: "2019-01-11"
-          }
-        },
-        {
-          name: "Deploy", 
-          range: {
-            start: "2019-01-14",
-            end: "2019-01-14"
-          }
-        },
-      ]
-    }),
-    new Project({name:"Example Project, Phase 2", 
-    phases:[
-      {
-        name: "Detail Design", 
-        range: {
-          start: "2019-01-09",
-          end: "2019-01-09"
-        }
-      },
-      {
-        name: "Story Planning", 
-        range: {
-          start: "2019-01-09",
-          end: "2019-01-09"
-        }
-      },
-      {
-        name: "Development", 
-        range: {
-          start: "2018-12-20",
-          end: "2019-01-01"
-        }
-      },
-      {
-        name: "Testing", 
-        range: {
-          start: "2019-01-02",
-          end: "2019-01-08"
-        }
-      },
-      {
-        name: "QAT", 
-        range: {
-          start: "2019-01-09",
-          end: "2019-01-22"
-        }
-      },
-      {
-        name: "Deploy", 
-        range: {
-          start: "2019-01-22",
-          end: "2019-01-23"
-        }
-      },
-    ]}),
-    new Project({name:"Potential Project"})
-  ];
-
   constructor(
     protected localStorage: LocalStorage,
     protected http: HttpClient
@@ -146,9 +51,6 @@ export class ProjectService extends AbstractListService<Project> {
     super(localStorage,http,'/api/project');
   }
   
-  getDefault(): Project[] {
-    return this.projects;
-  }
   decode(json: string): Project[] {
     const jsonData = JSON.parse(json);
     let projects: Project[] = [];
@@ -257,7 +159,8 @@ export class ProjectService extends AbstractListService<Project> {
 
   getChartPreferences(): Observable<any> {
     return this.getOrDefault("chartPrefs",
-      {minDate:"2018-12-1",maxDate:"2019-03-01"},
+      {minDate:moment().startOf('month').format('YYYY-MM-DD'),
+      maxDate:moment().endOf('month').format('YYYY-MM-DD')},
       JSON.stringify,JSON.parse
     );
   }
