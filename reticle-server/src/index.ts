@@ -3,6 +3,7 @@ import Dashboard from './dashboard';
 import mongoose from 'mongoose';
 import bodyParser = require('body-parser');
 import Project from './project';
+mongoose.set('useFindAndModify', false); //https://mongoosejs.com/docs/deprecations.html#-findandmodify-
 mongoose.connect('mongodb://localhost:27017/test');
 
 const app = express();
@@ -52,8 +53,8 @@ pjRouter.put('/', async (req, res, next) => {
 });
 
 pjRouter.patch('/:id', async (req, res) => {
-  const db = await Project.update(
-      { _id : req.params.id },
+  const db = await Project.findByIdAndUpdate(
+      req.params.id,
       { $set : req.body },
       function( err, result ) {
           if ( err ) throw err;
