@@ -1,8 +1,8 @@
 <div class="body">
   <div class="header">
       <button (click)="addProject()" mat-stroked-button>Add Project</button>
-      <button (click)="exportProjects()" mat-stroked-button>Export Projects</button>
-      <button (click)="importProjects()" mat-stroked-button>Import Projects</button>
+      <!--button (click)="exportProjects()" mat-stroked-button>Export Projects</button-->
+      <!--button (click)="importProjects()" mat-stroked-button>Import Projects</button-->
       <button (click)="setDefaultPhases()" mat-stroked-button>Set Default Phases</button>
       <button (click)="toggleExpand()" mat-mini-fab style="color: black">
         <mat-icon *ngIf="expanded">remove</mat-icon>
@@ -21,5 +21,8 @@
           (onUpdate)="onUpdate($event)"
           (onDelete)="onDelete($event)"></app-project-card>
     </div>
+  </div>
+  <div *ngIf="loading" style="text-align: center;">
+    <img src="assets/zcougar_r_loadingicon.gif" alt="Loading">
   </div>
 </div>

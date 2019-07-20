@@ -1,0 +1,34 @@
+.list { 
+    display: inline-block; 
+    margin-left: 1em;
+    margin-top: 1em;
+    padding: 0.5em;
+    background-color: #ccc;
+    border-radius: 4px;
+    border: 1px solid #333;
+    color: #333;
+    
+    box-shadow: 5px 10px;
+    
+    .header {
+        font-weight: bold;
+        background-color: #00a087;
+        padding: 0.25em;
+    }
+}
+
+
+.card {
+    width: 200px;
+    padding: 0.5em;
+
+    //border-radius: 3px;
+    //border: 1px solid #333;
+    background-color: #eee;
+
+    margin-top: 0.5em;
+
+    
+    .title {
+    }
+}

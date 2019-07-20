@@ -1,0 +1,11 @@
+<div class="list"
+*ngFor="let list of cards">
+  <div class="header">{{list.name}}</div>
+  <div class="card"
+    *ngFor="let card of list.tickets"
+    cdkDrag>
+        <div class="title">{{card.artifactId}}</div>
+        <div>{{card.title}}</div>
+        <div>E:{{card.est}} R:{{card.rem}} A:{{card.act}}</div>
+    </div>
+  </div>

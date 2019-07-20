@@ -20,11 +20,13 @@ import { HttpClientModule } from '@angular/common/http';
 import { ChecklistComponent } from './checklist/checklist.component';
 import { ChecklistCardComponent } from './checklist-card/checklist-card.component';
 import { ReleaseComponentComponent } from './release-component/release-component.component';
+import { KanbanComponent } from './kanban/kanban.component';
 
 const appRoutes: Routes = [
   { path: 'projects', component: ProjectListComponent },
   { path: 'chart',  component: ProjectChartComponent },
   { path: 'checklist',  component: ChecklistComponent },
+  { path: 'kanban',  component: KanbanComponent },
   { path: '**',
     redirectTo: '/projects',
     pathMatch: 'full'
@@ -43,7 +45,8 @@ const appRoutes: Routes = [
     ProjectChartComponent,
     ChecklistComponent,
     ChecklistCardComponent,
-    ReleaseComponentComponent  ],
+    ReleaseComponentComponent,
+    KanbanComponent  ],
   imports: [
     RouterModule.forRoot(
       appRoutes,

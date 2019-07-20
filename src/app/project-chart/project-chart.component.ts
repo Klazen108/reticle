@@ -18,6 +18,8 @@ export class ProjectChartComponent implements OnInit {
 
   graphWidth: number = 500;
 
+  loading = true;
+
   constructor(
     private projectService: ProjectService
   ) { }
@@ -31,8 +33,10 @@ export class ProjectChartComponent implements OnInit {
       this.maxDate = moment(prefs.maxDate);
     });
 
+    this.loading = true;
     this.projectService.getList().subscribe(projects => {
       this.projects = projects;
+      this.loading = false;
     });
   }
 

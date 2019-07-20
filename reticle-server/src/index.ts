@@ -3,8 +3,22 @@ import Dashboard from './dashboard';
 import mongoose from 'mongoose';
 import bodyParser = require('body-parser');
 import Project from './project';
+import Task from './task';
 mongoose.set('useFindAndModify', false); //https://mongoosejs.com/docs/deprecations.html#-findandmodify-
 mongoose.connect('mongodb://localhost:27017/test');
+
+//refresh from teamforge once every 10 minutes
+/*setInterval(()=>{
+  const tasks: any[] = []; //TODO: query from task db
+  tasks.forEach(async t => {
+    console.log('updating task');
+    const newDoc = await Task.findOneAndUpdate(
+      {},
+      t,
+      { upsert: true, new: true, setDefaultsOnInsert: true }
+    );
+  });
+},10*60*1000)*/
 
 const app = express();
 
@@ -82,8 +96,19 @@ pjRouter.get('/', async (req, res, next) => {
   }
 });
 
+var taskRouter = express.Router();
+taskRouter.get('/', async (req, res, next) => {
+  try {
+    const db = await Task.find().exec();
+    res.send(db);
+  } catch (err) {
+    next(err);
+  }
+});
+
 app.use('/api/dashboard',dbRouter);
 app.use('/api/project',pjRouter);
+app.use('/api/task',taskRouter);
 
 app.listen(8080, () => {
   console.log('Example app listening on port 8080!')

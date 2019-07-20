@@ -17,6 +17,7 @@ export class ProjectListComponent implements OnInit {
   justDeleted: Project = null;
   justDeletedIndex: number = 0;
   expanded = true;
+  loading = false;
 
   constructor(
     private projectService: ProjectService,
@@ -25,8 +26,10 @@ export class ProjectListComponent implements OnInit {
   ) { }
 
   ngOnInit() {
+    this.loading = true;
     this.projectService.getList().subscribe(projects => {
       this.cards = projects;
+      this.loading = false;
     });
     /*this.projectService.getDashboard(193).subscribe(db => {
       this.cards = (db && db.projects) || [];
