@@ -17,6 +17,7 @@ import { DragDropModule } from '@angular/cdk/drag-drop';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatMomentDateModule } from '@angular/material-moment-adapter';
 import { FormsModule } from '@angular/forms';
+import { MatSelectModule } from '@angular/material';
 import { ProjectListHeaderComponent } from './project-list-header/project-list-header.component';
 import { DeleteDialogComponent } from './delete-dialog/delete-dialog.component';
 import { ImportDialogComponent } from './import-dialog/import-dialog.component';
@@ -73,7 +74,8 @@ const appRoutes: Routes = [
     MatDialogModule,
     MatSnackBarModule,
     MatIconModule,
-    MatListModule
+    MatListModule,
+    MatSelectModule
   ],
   providers: [],
   bootstrap: [AppComponent],

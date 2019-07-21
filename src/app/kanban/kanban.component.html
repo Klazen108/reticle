@@ -1,10 +1,17 @@
 <div class="container" cdkDropListGroup>
 <div class="list"
-*ngFor="let list of cards; let i = index"
+*ngFor="let list of lists; let i = index"
 (cdkDropListDropped)="dropped($event,i)"
-[cdkDropListData]="cards[i].tickets"
+[cdkDropListData]="lists[i]"
 cdkDropList>
-  <div class="header">{{list.name}}</div>
+  <div class="header">
+    {{list.name}}
+    <mat-select class="selector" [(value)]="list.onTransition">
+      <mat-option *ngFor="let func of transitionFunctions" [value]="func">
+        {{func.name}}
+      </mat-option>
+    </mat-select>
+  </div>
   <div class="card"
     *ngFor="let card of list.tickets"
     cdkDrag>

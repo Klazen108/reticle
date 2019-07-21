@@ -21,16 +21,23 @@
     box-shadow: 5px 10px;
     white-space: normal; //undo nowrap from container
     
+    width: 20em;
+
+    min-height: 5em;
+
     .header {
         font-weight: bold;
         background-color: #00a087;
         padding: 0.25em;
     }
+
+    .mat-select-value {
+        color: #333;
+    }
 }
 
 
 .card {
-    width: 200px;
     padding: 0.5em;
 
     //border-radius: 3px;
