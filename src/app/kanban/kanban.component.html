@@ -1,5 +1,9 @@
-<div class="list"
-*ngFor="let list of cards">
+<div class="container" cdkDropListGroup>
+<!--<div class="list"
+*ngFor="let list of cards; let i = index"
+(cdkDropListDropped)="dropped($event,i)"
+(cdkDropListData)="cards[i].tickets"
+cdkDropList>
   <div class="header">{{list.name}}</div>
   <div class="card"
     *ngFor="let card of list.tickets"
@@ -8,4 +12,34 @@
         <div>{{card.title}}</div>
         <div>E:{{card.est}} R:{{card.rem}} A:{{card.act}}</div>
     </div>
-  </div>
+  </div>-->
+
+  <div class="list"
+  (cdkDropListDropped)="dropped($event,0)"
+  (cdkDropListData)="cards[0].tickets"
+  cdkDropList>
+    <div class="header">{{cards[0].name}}</div>
+    <div class="card"
+      *ngFor="let card of cards[0].tickets"
+      cdkDrag>
+          <div class="title">{{card.artifactId}}</div>
+          <div>{{card.title}}</div>
+          <div>E:{{card.est}} R:{{card.rem}} A:{{card.act}}</div>
+      </div>
+    </div>
+
+    <div class="list"
+    (cdkDropListDropped)="dropped($event,1)"
+    (cdkDropListData)="cards[1].tickets"
+    cdkDropList>
+      <div class="header">{{cards[1].name}}</div>
+      <div class="card"
+        *ngFor="let card of cards[1].tickets"
+        cdkDrag>
+            <div class="title">{{card.artifactId}}</div>
+            <div>{{card.title}}</div>
+            <div>E:{{card.est}} R:{{card.rem}} A:{{card.act}}</div>
+        </div>
+      </div>
+
+</div>

@@ -10,7 +10,7 @@ import { Phase } from '../phase.model';
   styleUrls: ['./project-chart.component.scss']
 })
 export class ProjectChartComponent implements OnInit {
-  @ViewChild('graphBlock') private graphBlock: ElementRef;
+  @ViewChild('graphBlock', { static: true }) private graphBlock: ElementRef;
 
   projects: Project[] = [];
   minDate: moment.Moment;

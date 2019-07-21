@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Release } from '../release.model';
-import { MatSnackBar, MatDialog } from '@angular/material';
+import { MatDialog } from '@angular/material/dialog';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { ImportDialogComponent } from '../import-dialog/import-dialog.component';
 import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 import { ReleaseService } from '../release.service';

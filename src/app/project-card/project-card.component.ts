@@ -2,7 +2,9 @@ import { Component, OnInit, Input, Output, EventEmitter, ViewChild } from '@angu
 import { Project } from '../project.model';
 import * as moment from 'moment';
 import { timer, Subscription, Subject } from 'rxjs';
-import { MatDialog, MatTable, MatSnackBar } from '@angular/material';
+import { MatDialog } from '@angular/material/dialog';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { MatTable } from '@angular/material/table';
 import { DeleteDialogComponent } from '../delete-dialog/delete-dialog.component';
 import { Phase } from '../phase.model';
 
@@ -21,7 +23,7 @@ export class ProjectCardComponent implements OnInit {
   @Output() onUpdate: EventEmitter<Project> = new EventEmitter();
   @Output() onDelete: EventEmitter<Project> = new EventEmitter();
 
-  @ViewChild(MatTable) table: MatTable<any>;
+  @ViewChild(MatTable, { static: true }) table: MatTable<any>;
 
   curTime: moment.Moment = moment();
   timerSubscription: Subscription;

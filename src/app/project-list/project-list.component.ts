@@ -2,7 +2,8 @@ import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { Project } from '../project.model';
 import { ProjectService } from '../project.service';
 import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
-import { MatSnackBar, MatDialog } from '@angular/material';
+import { MatDialog } from '@angular/material/dialog';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { ImportDialogComponent } from '../import-dialog/import-dialog.component';
 import { DefaultPhaseDialogComponent } from '../default-phase-dialog/default-phase-dialog.component';
 
