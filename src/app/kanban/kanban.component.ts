@@ -62,9 +62,7 @@ export class KanbanComponent implements OnInit {
   dropped(event: CdkDragDrop<string[]>, i: number) {
 
     if (event.previousContainer === event.container) {
-      console.log(this.cards[i])
-      moveItemInArray(this.cards[i], event.previousIndex, event.currentIndex);
-      console.log(this.cards[i])
+      moveItemInArray(this.cards[i].tickets, event.previousIndex, event.currentIndex);
     } else {
       transferArrayItem(event.previousContainer.data,
                         event.container.data,
