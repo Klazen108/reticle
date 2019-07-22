@@ -4,7 +4,7 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
-    "start-proxy": "ng serve --proxy-config proxy.conf.json",
+    "start-proxy": "ng serve --proxy-config proxy.conf.json --host 0.0.0.0",
     "build": "ng build",
     "test": "ng test",
     "lint": "ng lint",
@@ -25,8 +25,10 @@
     "@angular/platform-browser-dynamic": "^8.1.2",
     "@angular/router": "^8.1.2",
     "@ngx-pwa/local-storage": "^7.4.0",
+    "@types/pg": "^7.4.14",
     "core-js": "^2.5.4",
     "moment": "^2.23.0",
+    "pg": "^7.11.0",
     "rxjs": "^6.0.0",
     "zone.js": "^0.9.1"
   },

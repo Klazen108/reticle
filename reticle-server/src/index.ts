@@ -1,9 +1,12 @@
-import express from 'express';
+import * as express from 'express';
 import Dashboard from './dashboard';
-import mongoose from 'mongoose';
+import * as mongoose from 'mongoose';
 import bodyParser = require('body-parser');
 import Project from './project';
 import Task from './task';
+import queries from './queries/teamforge';
+import {Client} from 'pg';
+import { forkJoin } from 'rxjs';
 mongoose.set('useFindAndModify', false); //https://mongoosejs.com/docs/deprecations.html#-findandmodify-
 mongoose.connect('mongodb://localhost:27017/test');
 
@@ -96,60 +99,89 @@ pjRouter.get('/', async (req, res, next) => {
   }
 });
 
+function mapTFStatus(tfStatus: string): string {
+  if (tfStatus==="Open / Acknowledged") return "Open";
+  if (tfStatus==="Not Started") return "Open";
+  if (tfStatus==="In Development") return "In Development";
+  if (tfStatus==="Started") return "In Development";
+  if (tfStatus==="Ready For Test") return "Ready for Test";
+  if (tfStatus==="Completed") return "Ready for Test";
+  return "Open";
+}
+
 var taskRouter = express.Router();
-taskRouter.get('/', async (req, res, next) => {
-  /*
+
+taskRouter.get('/update/:id', async (req,res,next) => {
   try {
-    const db = await Task.find().exec();
-    res.send(db);
+    //get srtifacts in folder
+    const planFolder = req.params.id;
+    const query = queries.tfArtifactsByPlanningFolder;
+    const client = new Client('');//teamforge url
+    await client.connect();
+    const rows = await client.query(query,[planFolder]);
+    await client.end();
+
+    await forkJoin(rows.rows.map(task => Task.findOneAndUpdate(
+      { taskId: task.id },
+      { $set: {
+        name: task.title,
+        taskId: task.id,
+        developerId: task.assigned_to_user_id,
+        estimate: task.estimated_effort,
+        remaining: task.remaining_effort,
+        actual: task.actual_effort,
+        state: mapTFStatus(task.status)
+      } },
+      { upsert: true, new: true, setDefaultsOnInsert: true },
+      err => { if (err) throw err; }
+    ))).subscribe(r => res.send(r));
   } catch (err) {
     next(err);
-  }*/
-  res.send([
-    {
-      name: 'Open',
-      tickets: [
-        {artifactId:"artf12345",title:'task 2',est:1,rem:1,act:0},
-        {artifactId:"artf12345",title:'woogedy woogedy woogedy woogedy woogedy woogedy ',est:1,rem:1,act:0}
-      ],
-      onTransition: "ba13d6df-4268-4838-ba8a-32778ad9fbb0"
-    },
-    {
-      name: 'Acknowledged',
-      tickets: [
-        {artifactId:"artf12345",title:'task 2',est:1,rem:1,act:0},
-        {artifactId:"artf12345",title:'task 2',est:1,rem:1,act:0}
-      ]
-    },
-    {
-      name: 'In Development',
-      tickets: [
-        {artifactId:"artf12345",title:'task 2',est:1,rem:1,act:0},
-        {artifactId:"artf12345",title:'task 2',est:1,rem:1,act:0}
-      ]
-    },
-    {
-      name: 'Ready For Test',
-      tickets: [
-        {artifactId:"artf12345",title:'task 2',est:1,rem:1,act:0},
-        {artifactId:"artf12345",title:'task 2',est:1,rem:1,act:0}
-      ]
-    },
-    {
-      name: 'Ready For QA',
-      tickets: [
-        {artifactId:"artf12345",title:'task 2',est:1,rem:1,act:0},
-        {artifactId:"artf12345",title:'task 2',est:1,rem:1,act:0}
-      ]
-    },
-    {
-      name: 'QA Passed',
-      tickets: [
-        {artifactId:"artf12345",title:'task 2',est:1,rem:1,act:0},
-        {artifactId:"artf12345",title:'task 2',est:1,rem:1,act:0}
-      ]
+  }
+});
+
+taskRouter.patch("/:id", async (req,res,next) => {
+  try {
+    const task = await Task.findById(req.params.id);
+
+    if (req.body.state !== task.state) {
+      //transition
     }
-  ]);
+    const result = await Task.findByIdAndUpdate(
+      req.params.id,
+      { $set: req.body },
+      err => {if (err) throw err;}
+    );
+    res.send(result);
+  } catch (err) {
+    next(err);
+  }
+})
+
+taskRouter.get('/', async (req, res, next) => {
+  try {
+    const tasks = await Task.find().exec();
+    const groupedTasks = tasks.reduce((acc,cur) => {
+      var list = acc.find(l => l.name === cur.state)
+      if (list === undefined) {
+        list = {name: cur.state,tickets: []};
+        acc.push(list);
+      }
+      list.tickets.push(cur);
+      return acc;
+    },[
+      {name: "Open", tickets:[]},
+      {name: "Acknowledged", tickets:[]},
+      {name: "In Development", tickets:[]},
+      {name: "Ready for Test", tickets:[]},
+      {name: "Ready for QA", tickets:[]},
+      {name: "QA Passed", tickets:[]},
+    ] as {name:string,tickets:{}[]}[]);
+
+    res.send(groupedTasks);
+  } catch (err) {
+    next(err); 
+  }
 });
 
 app.use('/api/dashboard',dbRouter);
