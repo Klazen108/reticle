@@ -98,12 +98,58 @@ pjRouter.get('/', async (req, res, next) => {
 
 var taskRouter = express.Router();
 taskRouter.get('/', async (req, res, next) => {
+  /*
   try {
     const db = await Task.find().exec();
     res.send(db);
   } catch (err) {
     next(err);
-  }
+  }*/
+  res.send([
+    {
+      name: 'Open',
+      tickets: [
+        {artifactId:"artf12345",title:'task 2',est:1,rem:1,act:0},
+        {artifactId:"artf12345",title:'woogedy woogedy woogedy woogedy woogedy woogedy ',est:1,rem:1,act:0}
+      ],
+      onTransition: "ba13d6df-4268-4838-ba8a-32778ad9fbb0"
+    },
+    {
+      name: 'Acknowledged',
+      tickets: [
+        {artifactId:"artf12345",title:'task 2',est:1,rem:1,act:0},
+        {artifactId:"artf12345",title:'task 2',est:1,rem:1,act:0}
+      ]
+    },
+    {
+      name: 'In Development',
+      tickets: [
+        {artifactId:"artf12345",title:'task 2',est:1,rem:1,act:0},
+        {artifactId:"artf12345",title:'task 2',est:1,rem:1,act:0}
+      ]
+    },
+    {
+      name: 'Ready For Test',
+      tickets: [
+        {artifactId:"artf12345",title:'task 2',est:1,rem:1,act:0},
+        {artifactId:"artf12345",title:'task 2',est:1,rem:1,act:0}
+      ]
+    },
+    {
+      name: 'Ready For QA',
+      tickets: [
+        {artifactId:"artf12345",title:'task 2',est:1,rem:1,act:0},
+        {artifactId:"artf12345",title:'task 2',est:1,rem:1,act:0}
+      ]
+    },
+    {
+      name: 'QA Passed',
+      tickets: [
+        {artifactId:"artf12345",title:'task 2',est:1,rem:1,act:0},
+        {artifactId:"artf12345",title:'task 2',est:1,rem:1,act:0}
+      ]
+    }
+  ]);
 });
 
 app.use('/api/dashboard',dbRouter);

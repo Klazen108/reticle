@@ -7,7 +7,7 @@ cdkDropList>
   <div class="header">
     {{list.name}}
     <mat-select class="selector" [(value)]="list.onTransition">
-      <mat-option *ngFor="let func of transitionFunctions" [value]="func">
+      <mat-option *ngFor="let func of transitionFunctions" [value]="func.id">
         {{func.name}}
       </mat-option>
     </mat-select>

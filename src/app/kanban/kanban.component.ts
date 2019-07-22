@@ -2,6 +2,7 @@ import { Component, OnInit, Input, ViewChildren } from '@angular/core';
 import { CdkDragDrop, moveItemInArray, transferArrayItem, CdkDropList } from '@angular/cdk/drag-drop';
 import { transition } from '@angular/animations';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { TaskService } from '../task.service';
 
 type TransitionFunction = (any) => boolean;
 interface TransitionFunctionEntry {
@@ -32,67 +33,34 @@ export class KanbanComponent implements OnInit {
   ]
 
   @Input()
-  lists: any[] = [
-    {
-      name: 'Open',
-      tickets: [
-        {artifactId:"artf12345",title:'task 2',est:1,rem:1,act:0},
-        {artifactId:"artf12345",title:'woogedy woogedy woogedy woogedy woogedy woogedy ',est:1,rem:1,act:0}
-      ],
-      onTransition: this.transitionFunctions.find(a => a.id === "ba13d6df-4268-4838-ba8a-32778ad9fbb0")
-    },
-    {
-      name: 'Acknowledged',
-      tickets: [
-        {artifactId:"artf12345",title:'task 2',est:1,rem:1,act:0},
-        {artifactId:"artf12345",title:'task 2',est:1,rem:1,act:0}
-      ]
-    },
-    {
-      name: 'In Development',
-      tickets: [
-        {artifactId:"artf12345",title:'task 2',est:1,rem:1,act:0},
-        {artifactId:"artf12345",title:'task 2',est:1,rem:1,act:0}
-      ]
-    },
-    {
-      name: 'Ready For Test',
-      tickets: [
-        {artifactId:"artf12345",title:'task 2',est:1,rem:1,act:0},
-        {artifactId:"artf12345",title:'task 2',est:1,rem:1,act:0}
-      ]
-    },
-    {
-      name: 'Ready For QA',
-      tickets: [
-        {artifactId:"artf12345",title:'task 2',est:1,rem:1,act:0},
-        {artifactId:"artf12345",title:'task 2',est:1,rem:1,act:0}
-      ]
-    },
-    {
-      name: 'QA Passed',
-      tickets: [
-        {artifactId:"artf12345",title:'task 2',est:1,rem:1,act:0},
-        {artifactId:"artf12345",title:'task 2',est:1,rem:1,act:0}
-      ]
-    }
-  ];
+  lists: any[] = [];
 
   constructor(
-    public snackBar: MatSnackBar
+    public snackBar: MatSnackBar,
+    protected taskService: TaskService
   ) { }
 
   ngOnInit() {
+    this.taskService.getList().subscribe(lists => this.lists = lists);
   }
 
   dropped(event: CdkDragDrop<any>, i: number) {
     if (event.previousContainer === event.container) {
+      //Re-sorting cards in list
       moveItemInArray(this.lists[i].tickets, event.previousIndex, event.currentIndex);
     } else {
+      //Transitioning card to other list
       if (event.container.data.onTransition !== undefined) {
+        const transFunc = this.transitionFunctions.find(f => f.id === event.container.data.onTransition);
+        if (transFunc === undefined) {
+          this.snackBar.open(`Unsupported transition function ${event.container.data.onTransition}! Please contact the developer.`, "OK", {
+            duration: 10000,
+          }).onAction().subscribe();
+          return;
+        }
         try {
           const ticket = event.previousContainer.data[event.previousIndex];
-          const err = event.container.data.onTransition.func(ticket);
+          const err = transFunc.func(ticket);
           if (err) {
             this.snackBar.open(`State transition to ${event.container.data.name} denied: ${err}`, "OK", {
               duration: 10000,
