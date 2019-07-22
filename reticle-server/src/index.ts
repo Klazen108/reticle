@@ -1,4 +1,4 @@
-import * as express from 'express';
+import express from "express";
 import Dashboard from './dashboard';
 import * as mongoose from 'mongoose';
 import bodyParser = require('body-parser');
@@ -99,6 +99,10 @@ pjRouter.get('/', async (req, res, next) => {
   }
 });
 
+/**
+ * Map TF statuses into reticle statuses
+ * @param tfStatus The status from teamforge to map
+ */
 function mapTFStatus(tfStatus: string): string {
   if (tfStatus==="Open / Acknowledged") return "Open";
   if (tfStatus==="Not Started") return "Open";
@@ -107,6 +111,15 @@ function mapTFStatus(tfStatus: string): string {
   if (tfStatus==="Ready For Test") return "Ready for Test";
   if (tfStatus==="Completed") return "Ready for Test";
   return "Open";
+}
+
+/**
+ * Remove undefined fields from an object (to not clear them on mongoose insert)
+ * @param obj The object to clean up
+ */
+function cleanup(obj: any): any {
+  Object.keys(obj).forEach(key => obj[key] === undefined && delete obj[key])
+  return obj;
 }
 
 var taskRouter = express.Router();
@@ -123,7 +136,7 @@ taskRouter.get('/update/:id', async (req,res,next) => {
 
     await forkJoin(rows.rows.map(task => Task.findOneAndUpdate(
       { taskId: task.id },
-      { $set: {
+      { $set: cleanup({
         name: task.title,
         taskId: task.id,
         developerId: task.assigned_to_user_id,
@@ -131,7 +144,7 @@ taskRouter.get('/update/:id', async (req,res,next) => {
         remaining: task.remaining_effort,
         actual: task.actual_effort,
         state: mapTFStatus(task.status)
-      } },
+      }) },
       { upsert: true, new: true, setDefaultsOnInsert: true },
       err => { if (err) throw err; }
     ))).subscribe(r => res.send(r));
@@ -144,7 +157,7 @@ taskRouter.patch("/:id", async (req,res,next) => {
   try {
     const task = await Task.findById(req.params.id);
 
-    if (req.body.state !== task.state) {
+    if (task && req.body.state !== task.state) {
       //transition
     }
     const result = await Task.findByIdAndUpdate(
