@@ -1,0 +1,11 @@
+{
+    "reticle": {
+        "port":"8081"
+    },
+    "teamforgePlugin": {
+        "url":"",
+        "user":"",
+        "password":"",
+        "tfPgUrl":""
+    }
+}
