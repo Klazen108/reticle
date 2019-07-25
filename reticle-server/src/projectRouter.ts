@@ -35,9 +35,7 @@ export default (plugins: ReticlePlugin[]) => {
       let db = await Project.findById(req.params.id).exec();
       if (db == null) return res.sendStatus(404);
       const proj = db!;
-      if (proj.folder == null) return res.status(400).send("invalid project: missing folder");
-      const folder = proj.folder!;
-      const errors = await Promise.all(plugins.map(p => p.updateProject(folder)));
+      const errors = await Promise.all(plugins.map(p => p.updateProject(proj)));
       errors.filter(e => e !== "").forEach(e => console.log(e));
       res.send("ok");
     } catch (err) {

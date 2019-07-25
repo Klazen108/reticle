@@ -5,6 +5,7 @@ import queries from './queries/teamforge';
 import { Client } from 'pg';
 import { forkJoin } from 'rxjs';
 import { ReticlePlugin } from '../plugin';
+import { IProject } from '../../project';
 const execute = util.promisify(exec);
 
 interface TFArtifact {
@@ -28,6 +29,8 @@ class Teamforge implements ReticlePlugin {
     }
 
     configName = "TeamforgePlugin";
+
+    pluginName = "TeamforgePlugin";
 
     async init(config: any): Promise<string> {
         if (!config.url) {
@@ -63,8 +66,10 @@ class Teamforge implements ReticlePlugin {
         return "";
     }
 
-    async updateProject(project: string): Promise<string> {
+    async updateProject(project: IProject): Promise<string> {
         //get artifacts in folder
+        if (project.folder == null) return "invalid project: missing folder";
+        const folder = project.folder!;
         const planFolder = project;
         const query = queries.tfArtifactsByPlanningFolder;
         const client = new Client(this.tfPgUrl);//teamforge url
