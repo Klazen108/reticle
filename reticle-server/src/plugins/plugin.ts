@@ -1,5 +1,5 @@
 import { ITask } from "../models/task";
-import { IProject } from "../models/project";
+import { IKBProject } from "../models/kbProject";
 
 export interface ReticlePlugin {
     /** The key under which the config for this project can be found in the main config.json */
@@ -31,7 +31,7 @@ export interface ReticlePlugin {
      * @returns empty string if successful, or an error message if init failed. 
      * If an error message is returned, then this error should be logged, and the app will continue.
      */
-    updateProject(project: IProject): Promise<string>;
+    updateKanban(project: IKBProject): Promise<string>;
 }
 
 /**

@@ -30,19 +30,6 @@ export default (plugins: ReticlePlugin[]) => {
     }
   });
   
-  pjRouter.get('/:id/update', async (req, res, next) => {
-    try {
-      let db = await Project.findById(req.params.id).exec();
-      if (db == null) return res.sendStatus(404);
-      const proj = db!;
-      const errors = await Promise.all(plugins.map(p => p.updateProject(proj)));
-      errors.filter(e => e !== "").forEach(e => console.log(e));
-      res.send("ok");
-    } catch (err) {
-      next(err);
-    }
-  });
-  
   pjRouter.get('/', async (req, res, next) => {
     try {
       const db = await Project.find().exec();

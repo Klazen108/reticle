@@ -5,7 +5,7 @@ import queries from './queries/teamforge';
 import { Client } from 'pg';
 import { forkJoin } from 'rxjs';
 import { ReticlePlugin } from '../plugin';
-import { IProject } from '../../models/project';
+import { IKBProject } from '../../models/kbProject';
 const execute = util.promisify(exec);
 
 interface TFArtifact {
@@ -66,7 +66,7 @@ class Teamforge implements ReticlePlugin {
         return "";
     }
 
-    async updateProject(project: IProject): Promise<string> {
+    async updateKanban(project: IKBProject): Promise<string> {
         //get artifacts in folder
         if (project.folder == null) return "invalid project: missing folder";
         const planFolder = project.folder!;

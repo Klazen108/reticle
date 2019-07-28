@@ -32,6 +32,19 @@ kbRouter.put('/', async (req, res, next) => {
     next(err);
   }
 });
+  
+kbRouter.get('/:id/update', async (req, res, next) => {
+  try {
+    let db = await KBProject.findById(req.params.id).exec();
+    if (db == null) return res.sendStatus(404);
+    const proj = db!;
+    const errors = await Promise.all(plugins.map(p => p.updateKanban(proj)));
+    errors.filter(e => e !== "").forEach(e => console.log(e));
+    res.send("ok");
+  } catch (err) {
+    next(err);
+  }
+});
 
 return kbRouter;
 
