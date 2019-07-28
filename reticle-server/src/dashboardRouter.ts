@@ -1,5 +1,5 @@
 import express from "express";
-import Dashboard from "./dashboard";
+import Dashboard from "./models/dashboard";
 import { ReticlePlugin } from "./plugins/plugin";
 
 export default (plugins: ReticlePlugin[]) => {

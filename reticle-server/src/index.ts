@@ -6,6 +6,7 @@ import { ReticlePlugin, initPlugin } from "./plugins/plugin";
 import taskRouter from "./taskRouter";
 import projectRouter from "./projectRouter";
 import dashboardRouter from "./dashboardRouter";
+import kbRouter from "./kbRouter";
 
 
 (async () => {
@@ -31,6 +32,7 @@ import dashboardRouter from "./dashboardRouter";
   app.use('/api/dashboard',dashboardRouter(plugins));
   app.use('/api/project',projectRouter(plugins));
   app.use('/api/task',taskRouter(plugins));
+  app.use('/api/kb',kbRouter(plugins));
   app.listen(config.reticle.port, () => {
     console.log(`Reticle Server live on port ${config.reticle.port}!`)
   });

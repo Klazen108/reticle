@@ -1,5 +1,5 @@
-import { ITask } from "../task";
-import { IProject } from "../project";
+import { ITask } from "../models/task";
+import { IProject } from "../models/project";
 
 export interface ReticlePlugin {
     /** The key under which the config for this project can be found in the main config.json */

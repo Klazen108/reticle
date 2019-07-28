@@ -1,11 +1,11 @@
 import { exec } from 'child_process';
 import util from 'util';
-import Task, { ITask } from '../../task';
+import Task, { ITask } from '../../models/task';
 import queries from './queries/teamforge';
 import { Client } from 'pg';
 import { forkJoin } from 'rxjs';
 import { ReticlePlugin } from '../plugin';
-import { IProject } from '../../project';
+import { IProject } from '../../models/project';
 const execute = util.promisify(exec);
 
 interface TFArtifact {
@@ -69,8 +69,7 @@ class Teamforge implements ReticlePlugin {
     async updateProject(project: IProject): Promise<string> {
         //get artifacts in folder
         if (project.folder == null) return "invalid project: missing folder";
-        const folder = project.folder!;
-        const planFolder = project;
+        const planFolder = project.folder!;
         const query = queries.tfArtifactsByPlanningFolder;
         const client = new Client(this.tfPgUrl);//teamforge url
         await client.connect();

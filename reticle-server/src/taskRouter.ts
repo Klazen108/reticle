@@ -1,5 +1,5 @@
 import express from "express";
-import Task from "./task";
+import Task from "./models/task";
 import { ReticlePlugin } from "./plugins/plugin";
 
 export default (plugins: ReticlePlugin[]) => {
@@ -8,13 +8,17 @@ var taskRouter = express.Router();
 
 taskRouter.patch("/:id", async (req,res,next) => {
   try {
-    const task = await Task.findById(req.params.id);
+    const task = await Task.findByIdAndUpdate(
+      req.params.id,
+      { $set: req.body },
+      err => {if (err) throw err;}
+    );
     if (task == null) return res.send(404);
 
     const errors = await Promise.all(plugins.map(p => p.taskUpdated(task)));
     errors.filter(e => e !== "").forEach(e => console.log(e));
 
-    if (task && req.body.state !== task.state) {
+    /*if (task && req.body.state !== task.state) {
       //transition
       let obj = {
         id: task.taskId,
@@ -26,7 +30,8 @@ taskRouter.patch("/:id", async (req,res,next) => {
       { $set: req.body },
       err => {if (err) throw err;}
     );
-    res.send(result);
+    res.send(result);*/
+    res.send(task);
   } catch (err) {
     next(err);
   }
