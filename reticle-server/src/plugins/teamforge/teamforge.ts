@@ -1,4 +1,4 @@
-import { exec } from 'child_process';
+import { spawn } from 'child_process';
 import util from 'util';
 import Task, { ITask } from '../../models/task';
 import queries from './queries/teamforge';
@@ -6,7 +6,7 @@ import { Client } from 'pg';
 import { forkJoin } from 'rxjs';
 import { ReticlePlugin } from '../plugin';
 import { IKBProject } from '../../models/kbProject';
-const execute = util.promisify(exec);
+const execute = util.promisify(spawn);
 
 interface TFArtifact {
     ArtifactId: string;
@@ -52,7 +52,7 @@ class Teamforge implements ReticlePlugin {
         this.tfPgUrl = config.tfPgUrl;
 
         try {
-            await execute(`java -version`);
+            await spawn("java",["-version"]);
         } catch (e) {
             return "Java not installed. Required for this plugin.";
         }
@@ -62,7 +62,11 @@ class Teamforge implements ReticlePlugin {
 
     async taskUpdated(task: ITask): Promise<string> {
         const artifact = this.convertArtifact(task);
-        await execute(`java tf-update "${this.url}" "${this.user}" "${this.pass}" "${artifact.ArtifactId}" "${JSON.stringify(artifact)}"`);
+        await spawn("java",[
+            "-jar","tf-server.jar",
+            this.url,this.user,this.pass,artifact.ArtifactId,
+            JSON.stringify(artifact),"Updated by Reticle"
+        ]);
         return "";
     }
 
@@ -99,7 +103,7 @@ class Teamforge implements ReticlePlugin {
             EstimatedEffort: task.estimate,
             RemainingEffort: task.remaining,
             ActualEffort: task.actual,
-            Status: task.state
+            Status: this.reverseMapTFStatus(task.state)
         };
     }
 
@@ -115,6 +119,16 @@ class Teamforge implements ReticlePlugin {
       if (tfStatus==="Ready For Test") return "Ready for Test";
       if (tfStatus==="Completed") return "Ready for Test";
       return "Open";
+    }
+
+    /**
+     * Map reticle statuses into TF statuses
+     * @param tfStatus The status from teamforge to map
+     */
+    reverseMapTFStatus(tfStatus: string): string {
+        //TODO: need artifact type to determine appropriate status
+      if (tfStatus==="Open") return "Not Started";
+      return "Not Started";
     }
     
     /**
