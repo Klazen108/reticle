@@ -14,6 +14,8 @@ export interface ITask extends mongoose.Document {
     state: string;
 
     projectId: string;
+
+    type: string; //this is too teamforge-specific
 }
 export const TaskSchema = new mongoose.Schema({
     name: { type: String, required: true },
@@ -24,6 +26,7 @@ export const TaskSchema = new mongoose.Schema({
     actual: { type: Number, required: true },
     state: { type: String, required: true },
     projectId: { type: String, required: true },
+    type: {type: String, required: false}
 });
 
 const Task = mongoose.model<ITask>("Task", TaskSchema);

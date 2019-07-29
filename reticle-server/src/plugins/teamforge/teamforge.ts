@@ -89,7 +89,8 @@ class Teamforge implements ReticlePlugin {
             estimate: task.estimated_effort,
             remaining: task.remaining_effort,
             actual: task.actual_effort,
-            state: this.mapTFStatus(task.status)
+            state: this.mapTFStatus(task.status),
+            type: task.tracker_type
             }) },
             { upsert: true, new: true, setDefaultsOnInsert: true },
             err => { if (err) throw err; }
@@ -103,7 +104,7 @@ class Teamforge implements ReticlePlugin {
             EstimatedEffort: task.estimate,
             RemainingEffort: task.remaining,
             ActualEffort: task.actual,
-            Status: this.reverseMapTFStatus(task.state)
+            Status: this.reverseMapTFStatus(task.state,task.type)
         };
     }
 
@@ -118,17 +119,35 @@ class Teamforge implements ReticlePlugin {
       if (tfStatus==="Started") return "In Development";
       if (tfStatus==="Ready For Test") return "Ready for Test";
       if (tfStatus==="Completed") return "Ready for Test";
+      if (tfStatus==="Ready for QA") return "Ready for QA";
+      if (tfStatus==="QA Passed") return "QA Passed";
+      if (tfStatus==="In Production") return "QA Passed";
       return "Open";
     }
 
     /**
      * Map reticle statuses into TF statuses
-     * @param tfStatus The status from teamforge to map
+     * @param retStatus The status from reticle to map
+     * @param type The type of artifact (teamforge tracker type)
      */
-    reverseMapTFStatus(tfStatus: string): string {
-        //TODO: need artifact type to determine appropriate status
-      if (tfStatus==="Open") return "Not Started";
-      return "Not Started";
+    reverseMapTFStatus(retStatus: string, type: string): string {
+        //TODO: this should be configurable, not hardcoded
+        if (type==="Defect" || type==="Requirement") {
+            if (retStatus==="Open") return "Open / Acknowledged";
+            if (retStatus==="Acknowledged") return "Open / Acknowledged";
+            if (retStatus==="In Development") return "In Development";
+            if (retStatus==="Ready for Test") return "Ready For Test";
+            if (retStatus==="Ready for QA") return "Ready For QA";
+            if (retStatus==="QA Passed") return "QA Passed";
+        } else if (type==="Task") {
+            if (retStatus==="Open") return "Not Started";
+            if (retStatus==="Acknowledged") return "Not Started";
+            if (retStatus==="In Development") return "Started";
+            if (retStatus==="Ready for Test") return "Completed";
+            if (retStatus==="Ready for QA") return "Completed";
+            if (retStatus==="QA Passed") return "Completed";
+        }
+        throw new Error(`Unsupported task type for teamforge: ${type}`);
     }
     
     /**
